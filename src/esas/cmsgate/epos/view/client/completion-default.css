@@ -1,0 +1,35 @@
+#tab-instructions .tab-header {
+    background: #9fb399;
+    /*color: #fff;*/
+}
+
+#tab-instructions .tab-content {
+    /*background: #96b385;*/
+}
+
+#tab-qrcode .tab-header {
+    background: #9fb399;
+    /*color: #fff;*/
+}
+
+#tab-qrcode .tab-content {
+    /*background: #96b385;*/
+}
+
+#tab-webpay .tab-header {
+    background: #9fb399;
+    /*color: #fff;*/
+}
+
+#tab-webpay .tab-content {
+    /*background: #96b385;*/
+}
+
+#webpay_button {
+    background: #9fb399;
+}
+
+#webpay_message_unavailable {
+    color: #b94a4b;
+}
+
