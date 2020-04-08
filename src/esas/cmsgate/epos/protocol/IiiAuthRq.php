@@ -9,7 +9,7 @@
 namespace esas\cmsgate\epos\protocol;
 
 
-class EposAuthRq extends EposRq
+class IiiAuthRq
 {
     private $clientId;
     private $clientSecret;
@@ -21,7 +21,6 @@ class EposAuthRq extends EposRq
      */
     public function __construct($username, $password)
     {
-        parent::__construct();
         $this->clientId = $username;
         $this->clientSecret = $password;
     }

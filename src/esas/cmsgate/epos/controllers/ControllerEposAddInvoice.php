@@ -8,6 +8,7 @@
 
 namespace esas\cmsgate\epos\controllers;
 
+use esas\cmsgate\epos\protocol\IiiProtocol;
 use esas\cmsgate\protocol\Amount;
 use esas\cmsgate\epos\protocol\EposInvoiceAddRq;
 use esas\cmsgate\epos\protocol\EposInvoiceAddRs;
@@ -35,10 +36,10 @@ class ControllerEposAddInvoice extends ControllerEpos
             }
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
-            $eposProtocol = new EposProtocol($this->configWrapper);
-            $resp = $eposProtocol->auth();
-            if ($resp->hasError()) {
-                throw new Exception($resp->getResponseMessage(), $resp->getResponseCode());
+            $iiiProtocol = new IiiProtocol();
+            $authRs = $iiiProtocol->auth();
+            if ($authRs->hasError()) {
+                throw new Exception($authRs->getResponseMessage(), $authRs->getResponseCode());
             }
             $invoiceAddRq = new EposInvoiceAddRq();
             $invoiceAddRq->setOrderNumber($orderWrapper->getOrderNumber());
@@ -57,11 +58,12 @@ class ControllerEposAddInvoice extends ControllerEpos
                 $invoiceAddRq->addProduct($product);
                 unset($product); //??
             }
+            $eposProtocol = new EposProtocol($authRs->getAccessToken());
             $resp = $eposProtocol->addInvoice($invoiceAddRq);
             if ($resp->hasError()) {
                 $this->logger->error($loggerMainString . "Invoice was not added. Setting status[" . $this->configWrapper->getBillStatusFailed() . "]...");
                 $this->onFailed($orderWrapper, $resp);
-                throw new Exception($resp->getResponseMessage(), $resp->getResponseCode());  
+                throw new Exception($resp->getResponseMessage(), $resp->getResponseCode());
             } else {
                 $this->logger->info($loggerMainString . "Bill[" . $resp->getInvoiceId() . "] was successfully added. Updating status[" . $this->configWrapper->getBillStatusPending() . "]...");
                 $this->onSuccess($orderWrapper, $resp);

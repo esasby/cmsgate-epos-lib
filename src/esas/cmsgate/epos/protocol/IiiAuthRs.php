@@ -9,7 +9,7 @@
 namespace esas\cmsgate\epos\protocol;
 
 
-class EposAuthRs extends EposRs
+class IiiAuthRs extends EposRs
 {
     private $accessToken;
     private $expiresIn;

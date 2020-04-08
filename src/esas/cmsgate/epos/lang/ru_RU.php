@@ -17,8 +17,11 @@ return array(
     ConfigFieldsEpos::eposServiceCode() => 'Код услуги EPOS',
     ConfigFieldsEpos::eposServiceCode() . _DESC => 'Код услуги в системе EPOS',
 
+    ConfigFieldsEpos::eposEsasConnector() => 'Подклюение к ESAS',
+    ConfigFieldsEpos::eposEsasConnector() . _DESC => 'Поставщик услаг Подлючение к ООО "Электронные Системы и Сервисы". Иначе счета будут выставлятся через ООО "Универсальные Платежные Системы"',
+
     ConfigFieldsEpos::sandbox() => 'Sandbox',
-    ConfigFieldsEpos::sandbox() . _DESC => 'Режим *песочницы*. Если включен, то все счета буду выставляться в тестовой системе trial.hgrosh.by',
+    ConfigFieldsEpos::sandbox() . _DESC => 'Режим *песочницы*. Если включен, то все счета буду выставляться в тестовой системе api-dev.hgrosh.by',
 
     ConfigFieldsEpos::instructionsSection() => 'Секция "Инструкция"',
     ConfigFieldsEpos::instructionsSection() . _DESC => 'Если включена, то на итоговом экране клиенту будет доступна пошаговая инструкция по оплате счета в ЕРИП',
@@ -46,8 +49,9 @@ return array(
 
     ConfigFieldsEpos::paymentMethodDetails() => 'Описание способа оплаты',
     ConfigFieldsEpos::paymentMethodDetails() . _DESC => 'Описание, отображаемое клиенту, при выборе способа оплаты',
-    ConfigFieldsEpos::paymentMethodDetails() . _DEFAULT => '«Хуткi Грош»™ — платежный сервис по выставлению счетов в АИС *Расчет* (ЕРИП). ' .
-        'После выставления счета Вам будет доступна его оплата пластиковой карточкой и электронными деньгами, в любом из отделений банков, кассах, банкоматах, платежных терминалах, в системе электронных денег, через Интернет-банкинг, М-банкинг, интернет-эквайринг',
+    ConfigFieldsEpos::paymentMethodDetails() . _DEFAULT => '«EPOS»™ — платежный сервис по выставлению счетов в АИС *Расчет* (ЕРИП). ' .
+        'После выставления счета Вам будет доступна его оплата пластиковой карточкой и электронными деньгами, в любом из отделений банков, кассах, банкоматах, платежных терминалах, в системе электронных денег, через Интернет-банкинг, М-банкинг, интернет-эквайринг. ' .
+        'Также сервис предоставляет способ удобной оплаты счетов через QR-коды',
 
     ConfigFieldsEpos::billStatusPending() => 'Статус при выставлении счета',
     ConfigFieldsEpos::billStatusPending() . _DESC => 'Какой статус выставить заказу при успешном выставлении счета в ЕРИП (идентификатор существующего статуса)',
@@ -68,7 +72,7 @@ return array(
     ViewFields::INSTRUCTIONS => '<p>Для оплаты счета в EPOS необходимо:</p>
 <ol>
     <li>Выбрать дерево платежей ЕРИП</li>
-    <li>Выбрать услугу: <strong>@erip_path</strong></li>
+    <li>Выбрать услугу: <strong>Сервис EPOS</strong></li>
     <li>Ввести номер счета: <strong>@order_number</strong></li>
     <li>Проверить корректность информации</li>
     <li>Совершить платеж.</li>

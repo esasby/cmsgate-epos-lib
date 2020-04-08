@@ -48,6 +48,8 @@ class ManagedFieldsEpos extends ManagedFields
                 ->setValidator(new ValidatorNumeric())
                 ->setRequired(true));
         $this->registerField(
+            (new ConfigFieldCheckbox(ConfigFieldsEpos::eposEsasConnector())));
+        $this->registerField(
             (new ConfigFieldCheckbox(ConfigFieldsEpos::sandbox())));
         $this->registerField(
             (new ConfigFieldNumber(ConfigFieldsEpos::dueInterval()))

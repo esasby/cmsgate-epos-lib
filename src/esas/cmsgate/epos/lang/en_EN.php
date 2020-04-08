@@ -14,11 +14,14 @@ return array(
     ConfigFieldsEpos::iiiClientSecret() => 'Client secret',
     ConfigFieldsEpos::iiiClientSecret() . _DESC => '',
 
-    ConfigFieldsEpos::eposServiceCode() => 'ERIP ID',
+    ConfigFieldsEpos::eposServiceCode() => 'EPOS service code',
     ConfigFieldsEpos::eposServiceCode() . _DESC => 'Your shop EPOS unique service code',
 
+    ConfigFieldsEpos::eposEsasConnector() => 'ESAS connector',
+    ConfigFieldsEpos::eposEsasConnector() . _DESC => 'EPOS service connector. If *true* then all requests will be sent to esas.by, otherwise to hgrosh.by',
+
     ConfigFieldsEpos::sandbox() => 'Sandbox',
-    ConfigFieldsEpos::sandbox() . _DESC => 'Sandbox mode. If *true* then all requests will be sent to trial host trial.hgrosh.by',
+    ConfigFieldsEpos::sandbox() . _DESC => 'Sandbox mode. If *true* then all requests will be sent to trial host api-dev.hgrosh.by',
 
     ConfigFieldsEpos::instructionsSection() => 'Section Instructions',
     ConfigFieldsEpos::instructionsSection() . _DESC => 'If *true* then customer will see step-by-step instructions to pay bill with ERIP',
@@ -44,7 +47,8 @@ return array(
 
     ConfigFieldsEpos::paymentMethodDetails() => 'Payment method details',
     ConfigFieldsEpos::paymentMethodDetails() . _DESC => 'Description of the payment method that will be shown to the client at the time of payment',
-    ConfigFieldsEpos::paymentMethodDetails() . _DEFAULT => 'Hutkigrosh™ — payment service for invoicing in AIS *Raschet* (ERIP). After invoicing you will be available for payment by a plastic card and electronic money, at any of the bank branches, cash desks, ATMs, payment terminals, in the electronic money system, through Internet banking, M-banking, Internet acquiring',
+    ConfigFieldsEpos::paymentMethodDetails() . _DEFAULT => 'EPOS™ — payment service for invoicing in AIS *Raschet* (ERIP). After invoicing you will be available for payment by a plastic card and electronic money, at any of the bank branches, cash desks, ATMs, payment terminals, in the electronic money system, through Internet banking, M-banking, Internet acquiring. ' .
+'Also EPOS service gives possibility to pay bills by QR-codes',
 
     ConfigFieldsEpos::billStatusPending() => 'Bill status pending',
     ConfigFieldsEpos::billStatusPending() . _DESC => 'Mapped status for pending bills',
@@ -65,7 +69,7 @@ return array(
     ViewFields::INSTRUCTIONS => '<p>To pay an bill in ERIP:</p>
 <ol>
     <li>Select the ERIP payment tree</li>
-    <li>Select a service: <strong>@erip_path</strong></li>
+    <li>Select a service: <strong>EPOS</strong></li>
     <li>Enter bill number <strong>@order_number</strong></li>
     <li>Verify information is correct</li>
     <li>Make a payment</li>

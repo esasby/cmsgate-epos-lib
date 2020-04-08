@@ -11,6 +11,7 @@ namespace esas\cmsgate\epos\controllers;
 use esas\cmsgate\epos\protocol\EposProtocol;
 use esas\cmsgate\epos\protocol\EposWebPayRq;
 use esas\cmsgate\epos\protocol\EposWebPayRs;
+use esas\cmsgate\epos\protocol\IiiProtocol;
 use esas\cmsgate\Registry;
 use esas\cmsgate\epos\RegistryEpos;
 use esas\cmsgate\epos\utils\RequestParamsEpos;
@@ -30,18 +31,17 @@ class ControllerEposWebpayForm extends ControllerEpos
         try {
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
-            $hg = new EposProtocol($this->configWrapper);
-            $resp = $hg->auth();
-            if ($resp->hasError()) {
-                $hg->apiLogOut();
-                throw new Exception($resp->getResponseMessage());
+            $iiiProtocol = new IiiProtocol();
+            $authRs = $iiiProtocol->auth();
+            if ($authRs->hasError()) {
+                throw new Exception($authRs->getResponseMessage());
             }
             $webPayRq = new EposWebPayRq();
             $webPayRq->setInvoiceId($orderWrapper->getExtId());
             $webPayRq->setReturnUrl($this->generateSuccessReturnUrl($orderWrapper));
             $webPayRq->setCancelReturnUrl($this->generateUnsuccessReturnUrl($orderWrapper));
             $webPayRq->setButtonLabel(Registry::getRegistry()->getTranslator()->translate(ViewFields::WEBPAY_BUTTON_LABEL));
-            $webPayRs = $hg->getWebpayForm($webPayRq);
+            $webPayRs = (new EposProtocol($authRs->getAccessToken()))->getWebpayForm($webPayRq);
             $this->logger->info($loggerMainString . "Controller ended");
             return $webPayRs;
         } catch (Throwable $e) {
