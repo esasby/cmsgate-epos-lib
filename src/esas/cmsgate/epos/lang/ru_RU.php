@@ -14,8 +14,14 @@ return array(
     ConfigFieldsEpos::iiiClientSecret() => 'Секрет',
     ConfigFieldsEpos::iiiClientSecret() . _DESC => 'Секретный ключ для доступа к сервису идентификации',
 
+    ConfigFieldsEpos::eposServiceProviderCode() => 'Код ПУ',
+    ConfigFieldsEpos::eposServiceProviderCode() . _DESC => 'Код поставщика услуги в системе EPOS',
+
     ConfigFieldsEpos::eposServiceCode() => 'Код услуги EPOS',
     ConfigFieldsEpos::eposServiceCode() . _DESC => 'Код услуги в системе EPOS',
+
+    ConfigFieldsEpos::eposRetailOutletCode() => 'Код торговой точки',
+    ConfigFieldsEpos::eposRetailOutletCode() . _DESC => 'Код торговой точки',
 
     ConfigFieldsEpos::eposEsasConnector() => 'Подклюение к ESAS',
     ConfigFieldsEpos::eposEsasConnector() . _DESC => 'Поставщик услаг Подлючение к ООО "Электронные Системы и Сервисы". Иначе счета будут выставлятся через ООО "Универсальные Платежные Системы"',
@@ -73,7 +79,7 @@ return array(
 <ol>
     <li>Выбрать дерево платежей ЕРИП</li>
     <li>Выбрать услугу: <strong>Сервис EPOS</strong></li>
-    <li>Ввести номер счета: <strong>@order_number</strong></li>
+    <li>Ввести номер счета: <strong>@epos_order_id</strong></li>
     <li>Проверить корректность информации</li>
     <li>Совершить платеж.</li>
 </ol>',

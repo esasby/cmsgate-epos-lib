@@ -56,8 +56,10 @@ class EposProtocol extends ProtocolCurl
             $this->logger->debug($loggerMainString . "addInvoice started");
             $postData = array();
             $postData['merchantInfo']['serviceId'] = RegistryEpos::getRegistry()->getConfigWrapper()->getEposServiceCode();
+            $postData['merchantInfo']['retailOutlet']['code'] = RegistryEpos::getRegistry()->getConfigWrapper()->getEposRetailOutletCode();
             $postData['number'] = $invoiceAddRq->getOrderNumber();
-            $postData['currency'] = $invoiceAddRq->getAmount()->getCurrency();
+            $postData['currency'] = $invoiceAddRq->getAmount()->getCurrencyNumcode();
+            $postData['dateInAirUTC'] = date("Y-m-d\TH:i:s.u");
             $postData['paymentDueTerms']['termsDay'] = $invoiceAddRq->getDueInterval();
             $postData['billingInfo']['contact']['fullName'] = $invoiceAddRq->getFullName();
             $postData['billingInfo']['phone']['fullNumber'] = $invoiceAddRq->getMobilePhone();
@@ -71,6 +73,7 @@ class EposProtocol extends ProtocolCurl
             foreach ($invoiceAddRq->getProducts() as $pr) {
                 $item['code'] = $pr->getInvId();
                 $item['name'] = htmlentities($pr->getName(), ENT_XML1);
+                $item['measure'] = 'pcs';
                 $item['quantity'] = $pr->getCount();
                 $item['unitPrice']['value'] = $pr->getUnitPrice();
                 $items[] = $item;
@@ -80,11 +83,14 @@ class EposProtocol extends ProtocolCurl
             $resArray = $this->requestPost('v1/invoicing/invoice?canPayAtOnce=true', json_encode($postData), RsType::_ARRAY);
             if ($resArray == null || !is_array($resArray)) {
                 throw new Exception("Wrong response!", EposRs::ERROR_RESP_FORMAT);
-            } elseif (array_key_exists('id', $resArray)) {
-                $resp->setInvoiceId($resArray['id']);
             }
-            $resp->setResponseCode(array_key_exists('code', $resArray) ? $resArray['code'] : ProtocolError::ERROR_WRONG_MSG_FORMAT);
-            $resp->setResponseMessage(array_key_exists('message', $resArray) ?$resArray['message'] : "");
+            $resArray = $resArray[0]; //epos возвращает даже один счет массивом
+            if (array_key_exists('id', $resArray)) {
+                $resp->setInvoiceId($resArray['id']);
+            } else {
+                $resp->setResponseCode(array_key_exists('code', $resArray) ? $resArray['code'] : ProtocolError::ERROR_WRONG_MSG_FORMAT);
+                $resp->setResponseMessage(array_key_exists('message', $resArray) ? $resArray['message'] : "");
+            }
             $this->logger->debug($loggerMainString . "addInvoice ended");
         } catch (Throwable $e) {
             $this->logger->error($loggerMainString . "addInvoice exception", $e);
@@ -118,13 +124,13 @@ class EposProtocol extends ProtocolCurl
             $postData['cancelReturnUrl'] = htmlspecialchars($webPayRq->getCancelReturnUrl());
             $postData['submitValue'] = $webPayRq->getButtonLabel();
             $postData['isTestMode'] = RegistryEpos::getRegistry()->getConfigWrapper()->isSandbox();
-            $resStr = $this->requestPost('v1/pay/webpay', $postData, RsType::_STRING);
+            $resStr = $this->requestPost('v1/pay/webpay', json_encode($postData), RsType::_STRING);
             $resXml = simplexml_load_string($resStr, null, LIBXML_NOCDATA);
-            if (!isset($resXml->status)) {
+            if ($resXml == null) {
                 throw new Exception("Неверный формат ответа", EposRs::ERROR_RESP_FORMAT);
             }
-            $resp->setResponseCode($resXml->status);
-            $resp->setHtmlForm($resXml->form->__toString());
+//            $resp->setResponseCode($resXml->status);
+            $resp->setHtmlForm($resStr);
             $this->logger->debug($loggerMainString . "getWebpayForm ended");
         } catch (Throwable $e) {
             $this->logger->error($loggerMainString . "getWebpayForm exception: ", $e);

@@ -28,9 +28,19 @@ class ConfigFieldsEpos extends ConfigFields
         return self::getCmsRelatedKey("iii_client_secret");
     }
 
+    public static function eposServiceProviderCode()
+    {
+        return self::getCmsRelatedKey("epos_service_provider_code");
+    }
+
     public static function eposServiceCode()
     {
         return self::getCmsRelatedKey("epos_service_code");
+    }
+
+    public static function eposRetailOutletCode()
+    {
+        return self::getCmsRelatedKey("epos_retail_outlet_code");
     }
 
     public static function eposEsasConnector()

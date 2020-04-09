@@ -14,8 +14,14 @@ return array(
     ConfigFieldsEpos::iiiClientSecret() => 'Client secret',
     ConfigFieldsEpos::iiiClientSecret() . _DESC => '',
 
+    ConfigFieldsEpos::eposServiceProviderCode() => 'SP code',
+    ConfigFieldsEpos::eposServiceProviderCode() . _DESC => 'Your shop EPOS unique service provider code',
+
     ConfigFieldsEpos::eposServiceCode() => 'EPOS service code',
-    ConfigFieldsEpos::eposServiceCode() . _DESC => 'Your shop EPOS unique service code',
+    ConfigFieldsEpos::eposServiceCode() . _DESC => 'Your shop EPOS service code',
+
+    ConfigFieldsEpos::eposRetailOutletCode() => 'Retail outlet code',
+    ConfigFieldsEpos::eposRetailOutletCode() . _DESC => 'Your retail outlet code',
 
     ConfigFieldsEpos::eposEsasConnector() => 'ESAS connector',
     ConfigFieldsEpos::eposEsasConnector() . _DESC => 'EPOS service connector. If *true* then all requests will be sent to esas.by, otherwise to hgrosh.by',
@@ -70,7 +76,7 @@ return array(
 <ol>
     <li>Select the ERIP payment tree</li>
     <li>Select a service: <strong>EPOS</strong></li>
-    <li>Enter bill number <strong>@order_number</strong></li>
+    <li>Enter bill number <strong>@epos_order_id</strong></li>
     <li>Verify information is correct</li>
     <li>Make a payment</li>
 </ol>',

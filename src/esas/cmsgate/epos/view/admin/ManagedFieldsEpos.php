@@ -44,7 +44,15 @@ class ManagedFieldsEpos extends ManagedFields
                 ->setValidator(new ValidatorNotEmpty())
                 ->setRequired(true));
         $this->registerField(
+            (new ConfigFieldNumber(ConfigFieldsEpos::eposServiceProviderCode()))
+                ->setValidator(new ValidatorNumeric())
+                ->setRequired(true));
+        $this->registerField(
             (new ConfigFieldNumber(ConfigFieldsEpos::eposServiceCode()))
+                ->setValidator(new ValidatorNumeric())
+                ->setRequired(true));
+        $this->registerField(
+            (new ConfigFieldNumber(ConfigFieldsEpos::eposRetailOutletCode()))
                 ->setValidator(new ValidatorNumeric())
                 ->setRequired(true));
         $this->registerField(

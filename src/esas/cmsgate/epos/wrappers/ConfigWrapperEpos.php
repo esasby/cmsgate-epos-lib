@@ -61,12 +61,31 @@ abstract class ConfigWrapperEpos extends ConfigWrapper
     }
 
     /**
+     * Уникальный код поставщика услуг в EPOS
+     * @return string
+     */
+    public function getEposServiceProviderCode()
+    {
+        return $this->getConfig(ConfigFieldsEpos::eposServiceProviderCode());
+    }
+
+
+    /**
      * Уникальный код услуги в EPOS
      * @return string
      */
     public function getEposServiceCode()
     {
         return $this->getConfig(ConfigFieldsEpos::eposServiceCode());
+    }
+
+    /**
+     * Код торговой точки
+     * @return string
+     */
+    public function getEposRetailOutletCode()
+    {
+        return $this->getConfig(ConfigFieldsEpos::eposRetailOutletCode());
     }
 
     /**
@@ -130,8 +149,12 @@ abstract class ConfigWrapperEpos extends ConfigWrapper
                 return $this->getIiiClientId();
             case ConfigFieldsEpos::iiiClientSecret():
                 return $this->getIiiClientSecret();
+            case ConfigFieldsEpos::eposServiceProviderCode():
+                return $this->getEposServiceProviderCode();
             case ConfigFieldsEpos::eposServiceCode():
                 return $this->getEposServiceCode();
+            case ConfigFieldsEpos::eposRetailOutletCode():
+                return $this->getEposRetailOutletCode();
             case ConfigFieldsEpos::eposEsasConnector():
                 return $this->isEposEsasConnector();
             case ConfigFieldsEpos::instructionsSection():
@@ -149,6 +172,14 @@ abstract class ConfigWrapperEpos extends ConfigWrapper
             default:
                 return parent::get($config_key);
         }
+    }
+
+    public function cookText($text, $orderWrapper)
+    {
+        $text = parent::cookText($text, $orderWrapper);
+        return strtr($text, array(
+            "@epos_order_id" => $this->getEposServiceProviderCode() . '-' . $this->getEposServiceCode() . '-' . $orderWrapper->getOrderNumber()
+        ));
     }
 
 
