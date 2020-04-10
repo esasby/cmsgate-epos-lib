@@ -146,6 +146,45 @@ class EposProtocol extends ProtocolCurl
 
 
     /**
+     * Получение данных для формирования QR-code
+     *
+     * @param EposQRCodeRq $QRCodeRq
+     * @return EposQRCodeRs
+     */
+
+    public function getQRCode(EposQRCodeRq $QRCodeRq)
+    {
+        $resp = new EposQRCodeRs();
+        $loggerMainString = "Invoice[" . $QRCodeRq->getInvoiceId() . "]: ";
+        try {// формируем xml
+            $this->logger->debug($loggerMainString . "getQRCode started");
+            $resArray = $this->requestGet('v1/invoicing/invoice/' . $QRCodeRq->getInvoiceId() . '/qrcode' . ($QRCodeRq->isRequestImage() ? '?getImage=true' : ''), "", RsType::_ARRAY);
+            if ($resArray == null || !is_array($resArray)) {
+                throw new Exception("Wrong response!", EposRs::ERROR_RESP_FORMAT);
+            }
+            if (array_key_exists('result', $resArray)) {
+                $resp->setAddress($resArray['result']['address'] . "pay?param=" . $resArray['result']['num']);
+                $resp->setQrData($resArray['result']['qrData']);
+                $resp->setImage($resArray['result']['image']);
+            } else {
+                $resp->setResponseCode(array_key_exists('code', $resArray) ? $resArray['code'] : ProtocolError::ERROR_WRONG_MSG_FORMAT);
+                $resp->setResponseMessage(array_key_exists('message', $resArray) ? $resArray['message'] : "");
+            }
+            $this->logger->debug($loggerMainString . "getQRCode ended");
+        } catch (Throwable $e) {
+            $this->logger->error($loggerMainString . "getQRCode exception: ", $e);
+            $resp->setResponseCode(EposRs::ERROR_DEFAULT);
+            $resp->setResponseMessage($e->getMessage());
+        } catch (Exception $e) { // для совместимости с php 5
+            $this->logger->error($loggerMainString . "getQRCode exception: ", $e);
+            $resp->setResponseCode(EposRs::ERROR_DEFAULT);
+            $resp->setResponseMessage($e->getMessage());
+        }
+        return $resp;
+    }
+
+
+    /**
      * Извлекает информацию о выставленном счете
      *
      * @param EposInvoiceGetRq $invoiceGetRq

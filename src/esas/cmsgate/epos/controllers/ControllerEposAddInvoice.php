@@ -8,6 +8,7 @@
 
 namespace esas\cmsgate\epos\controllers;
 
+use esas\cmsgate\epos\protocol\EposProtocolFactory;
 use esas\cmsgate\epos\protocol\IiiProtocol;
 use esas\cmsgate\protocol\Amount;
 use esas\cmsgate\epos\protocol\EposInvoiceAddRq;
@@ -36,11 +37,6 @@ class ControllerEposAddInvoice extends ControllerEpos
             }
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
-            $iiiProtocol = new IiiProtocol();
-            $authRs = $iiiProtocol->auth();
-            if ($authRs->hasError()) {
-                throw new Exception($authRs->getResponseMessage(), $authRs->getResponseCode());
-            }
             $invoiceAddRq = new EposInvoiceAddRq();
             $invoiceAddRq->setOrderNumber($orderWrapper->getOrderNumber());
             $invoiceAddRq->setFullName($orderWrapper->getFullName());
@@ -58,7 +54,7 @@ class ControllerEposAddInvoice extends ControllerEpos
                 $invoiceAddRq->addProduct($product);
                 unset($product); //??
             }
-            $eposProtocol = new EposProtocol($authRs->getAccessToken());
+            $eposProtocol = EposProtocolFactory::getProtocol();
             $resp = $eposProtocol->addInvoice($invoiceAddRq);
             if ($resp->hasError()) {
                 $this->logger->error($loggerMainString . "Invoice was not added. Setting status[" . $this->configWrapper->getBillStatusFailed() . "]...");

@@ -50,6 +50,8 @@ class CompletionPanel
     private $webpayForm;
     private $webpayStatus;
 
+    private $qrCode;
+
     /**
      * ViewData constructor.
      * @param OrderWrapper $orderWrapper
@@ -160,7 +162,7 @@ class CompletionPanel
     public function getQRCodeDetails()
     {
         return strtr($this->translator->translate(ViewFields::QRCODE_DETAILS), array(
-            "@qr_code" => QRUtils::getEripBillQR($this->orderWrapper->getOrderId())
+            "@qr_code" => $this->getQrCode()
         ));
     }
 
@@ -178,6 +180,22 @@ class CompletionPanel
     public function setWebpayForm($webpayForm)
     {
         $this->webpayForm = $webpayForm;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getQrCode()
+    {
+        return $this->qrCode;
+    }
+
+    /**
+     * @param mixed $qrCode
+     */
+    public function setQrCode($qrCode)
+    {
+        $this->qrCode = $qrCode;
     }
 
     /**

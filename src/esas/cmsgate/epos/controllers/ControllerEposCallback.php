@@ -5,6 +5,7 @@ namespace esas\cmsgate\epos\controllers;
 use esas\cmsgate\epos\protocol\EposInvoiceGetRq;
 use esas\cmsgate\epos\protocol\EposInvoiceGetRs;
 use esas\cmsgate\epos\protocol\EposProtocol;
+use esas\cmsgate\epos\protocol\EposProtocolFactory;
 use esas\cmsgate\epos\protocol\IiiProtocol;
 use esas\cmsgate\epos\RegistryEpos;
 use esas\cmsgate\Registry;
@@ -46,14 +47,9 @@ class ControllerEposCallback extends ControllerEpos
             if (empty($invoiceId))
                 throw new Exception('Wrong invoiceId[' . $invoiceId . "]");
             $this->logger->info($loggerMainString . "Loading order data from EPOS service...");
-            $iiiProtocol = new IiiProtocol();
-            $authRs = $iiiProtocol->auth();
-            if ($authRs->hasError()) {
-                throw new Exception($authRs->getResponseMessage(), $authRs->getResponseCode());
-            }
-            $this->eposInvoiceGetRs = (new EposProtocol($authRs->getAccessToken()))->getInvoice(new EposInvoiceGetRq($invoiceId));
+            $this->eposInvoiceGetRs = EposProtocolFactory::getProtocol()->getInvoice(new EposInvoiceGetRq($invoiceId));
             if ($this->eposInvoiceGetRs->hasError())
-                throw new Exception($authRs->getResponseMessage(), $authRs->getResponseCode());
+                throw new Exception($this->eposInvoiceGetRs->getResponseMessage(), $this->eposInvoiceGetRs->getResponseCode());
             $this->logger->info($loggerMainString . 'Loading local order object for id[' . $this->eposInvoiceGetRs->getOrderNumber() . "]");
             $this->localOrderWrapper = RegistryEpos::getRegistry()->getOrderWrapperByExtId($invoiceId);
             if (empty($this->localOrderWrapper))

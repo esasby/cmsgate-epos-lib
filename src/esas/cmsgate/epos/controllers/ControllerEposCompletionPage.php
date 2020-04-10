@@ -8,10 +8,9 @@
 
 namespace esas\cmsgate\epos\controllers;
 
-use esas\cmsgate\epos\RegistryEpos;
+use esas\cmsgate\epos\utils\QRUtils;
 use esas\cmsgate\epos\utils\RequestParamsEpos;
 use esas\cmsgate\epos\view\client\CompletionPanel;
-use esas\cmsgate\wrappers\OrderWrapper;
 use Exception;
 use Throwable;
 
@@ -35,6 +34,11 @@ class ControllerEposCompletionPage extends ControllerEpos
                 $completionPanel->setWebpayForm($webpayResp->getHtmlForm());
                 if (array_key_exists(RequestParamsEpos::WEBPAY_STATUS, $_REQUEST))
                     $completionPanel->setWebpayStatus($_REQUEST[RequestParamsEpos::WEBPAY_STATUS]);
+            }
+            if ($this->configWrapper->isQRCodeSectionEnabled()) {
+                $controller = new ControllerEposQRCode();
+                $qrCodeRs = $controller->process($orderWrapper);
+                $completionPanel->setQrCode(QRUtils::createQRCode($qrCodeRs->getAddress(), $qrCodeRs->getQrData()));
             }
             return $completionPanel;
         } catch (Throwable $e) {

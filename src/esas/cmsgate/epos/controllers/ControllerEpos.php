@@ -10,9 +10,11 @@ namespace esas\cmsgate\epos\controllers;
 
 
 use esas\cmsgate\controllers\Controller;
+use esas\cmsgate\epos\protocol\IiiProtocol;
 use esas\cmsgate\Registry;
 use esas\cmsgate\epos\RegistryEpos;
 use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
+use Exception;
 
 abstract class ControllerEpos extends Controller
 {
@@ -35,6 +37,4 @@ abstract class ControllerEpos extends Controller
         $this->registry = Registry::getRegistry();
         $this->configWrapper = Registry::getRegistry()->getConfigWrapper();
     }
-
-
 }
