@@ -23,7 +23,7 @@ return array(
     ConfigFieldsEpos::eposRetailOutletCode() => 'Код торговой точки',
     ConfigFieldsEpos::eposRetailOutletCode() . _DESC => 'Код торговой точки',
 
-    ConfigFieldsEpos::eposEsasConnector() => 'Подклюение к ESAS',
+    ConfigFieldsEpos::eposEsasConnector() => 'Подключение к ESAS',
     ConfigFieldsEpos::eposEsasConnector() . _DESC => 'Поставщик услаг Подлючение к ООО "Электронные Системы и Сервисы". Иначе счета будут выставлятся через ООО "Универсальные Платежные Системы"',
 
     ConfigFieldsEpos::sandbox() => 'Sandbox',
