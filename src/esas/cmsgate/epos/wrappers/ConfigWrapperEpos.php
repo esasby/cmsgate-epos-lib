@@ -12,7 +12,7 @@ use esas\cmsgate\epos\ConfigFieldsEpos;
 use esas\cmsgate\Registry;
 use esas\cmsgate\wrappers\ConfigWrapper;
 
-abstract class ConfigWrapperEpos extends ConfigWrapper
+class ConfigWrapperEpos extends ConfigWrapper
 {
     /**
      * Произольно название интернет-мазагина
@@ -205,7 +205,5 @@ abstract class ConfigWrapperEpos extends ConfigWrapper
                 return Registry::getRegistry()->getTranslator()->getConfigFieldDefault($key);
         }
     }
-
-    abstract function getUrlWebpay($orderId);
 
 }

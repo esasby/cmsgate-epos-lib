@@ -8,12 +8,14 @@
 
 namespace esas\cmsgate\epos\view\client;
 
+use esas\cmsgate\view\client\ClientViewFields;
+
 /**
  * Перечисление полей, доступных на странице успешного выставления счета
- * Class ViewFields
+ * Class ClientViewFieldsEpos
  * @package esas\epos\view
  */
-class ViewFields
+class ClientViewFieldsEpos extends ClientViewFields
 {
     const INSTRUCTIONS_TAB_LABEL = 'epos_instructions_tab_label';
     const INSTRUCTIONS = 'epos_instructions_text';

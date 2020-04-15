@@ -20,13 +20,13 @@ use esas\cmsgate\utils\ResourceUtils;
 use esas\cmsgate\wrappers\OrderWrapper;
 
 /**
- * Class CompletionPanel используется для формирования итоговой страницы. Основной класс
+ * Class CompletionPanelEpos используется для формирования итоговой страницы. Основной класс
  * для темазависимого представления (HGCMS-23).
  * Разбит на множество мелких методов для возможности легкого переопрделения. Что позволяет формировать итоговоую
  * страницу в тегах и CSS-классах принятых в конкретных CMS
  * @package esas\epos\view\client
  */
-class CompletionPanel
+class CompletionPanelEpos
 {
     /**
      * @var Logger
@@ -104,7 +104,7 @@ class CompletionPanel
      */
     public function getInstructionsTabLabel()
     {
-        return $this->translator->translate(ViewFields::INSTRUCTIONS_TAB_LABEL);
+        return $this->translator->translate(ClientViewFieldsEpos::INSTRUCTIONS_TAB_LABEL);
     }
 
     /**
@@ -112,7 +112,7 @@ class CompletionPanel
      */
     public function getInstructionsText()
     {
-        return $this->configWrapper->cookText($this->translator->translate(ViewFields::INSTRUCTIONS), $this->orderWrapper);
+        return $this->configWrapper->cookText($this->translator->translate(ClientViewFieldsEpos::INSTRUCTIONS), $this->orderWrapper);
     }
 
 
@@ -153,7 +153,7 @@ class CompletionPanel
      */
     public function getQRCodeTabLabel()
     {
-        return $this->translator->translate(ViewFields::QRCODE_TAB_LABEL);
+        return $this->translator->translate(ClientViewFieldsEpos::QRCODE_TAB_LABEL);
     }
 
     /**
@@ -161,7 +161,7 @@ class CompletionPanel
      */
     public function getQRCodeDetails()
     {
-        return strtr($this->translator->translate(ViewFields::QRCODE_DETAILS), array(
+        return strtr($this->translator->translate(ClientViewFieldsEpos::QRCODE_DETAILS), array(
             "@qr_code" => $this->getQrCode()
         ));
     }
@@ -219,7 +219,7 @@ class CompletionPanel
      */
     public function getWebpayTabLabel()
     {
-        return $this->translator->translate(ViewFields::WEBPAY_TAB_LABEL);
+        return $this->translator->translate(ClientViewFieldsEpos::WEBPAY_TAB_LABEL);
     }
 
     /**
@@ -227,7 +227,7 @@ class CompletionPanel
      */
     public function getWebpayButtonLabel()
     {
-        return $this->translator->translate(ViewFields::WEBPAY_BUTTON_LABEL);
+        return $this->translator->translate(ClientViewFieldsEpos::WEBPAY_BUTTON_LABEL);
     }
 
 
@@ -236,7 +236,7 @@ class CompletionPanel
      */
     public function getWebpayDetails()
     {
-        return $this->translator->translate(ViewFields::WEBPAY_DETAILS);
+        return $this->translator->translate(ClientViewFieldsEpos::WEBPAY_DETAILS);
     }
 
     /**
@@ -244,7 +244,7 @@ class CompletionPanel
      */
     public function getWebpayMsgSuccess()
     {
-        return $this->translator->translate(ViewFields::WEBPAY_MSG_SUCCESS);
+        return $this->translator->translate(ClientViewFieldsEpos::WEBPAY_MSG_SUCCESS);
     }
 
     /**
@@ -252,7 +252,7 @@ class CompletionPanel
      */
     public function getWebpayMsgUnsuccess()
     {
-        return $this->translator->translate(ViewFields::WEBPAY_MSG_UNSUCCESS);
+        return $this->translator->translate(ClientViewFieldsEpos::WEBPAY_MSG_UNSUCCESS);
     }
 
     /**
@@ -260,7 +260,7 @@ class CompletionPanel
      */
     public function getWebpayMsgUnavailable()
     {
-        return $this->translator->translate(ViewFields::WEBPAY_MSG_UNAVAILABLE);
+        return $this->translator->translate(ClientViewFieldsEpos::WEBPAY_MSG_UNAVAILABLE);
     }
 
     public function elementTab($key, $header, $body)
@@ -384,7 +384,7 @@ class CompletionPanel
         $ret =
             element::div(
                 attribute::id("webpay_details"),
-                element::content($this->translator->translate(ViewFields::WEBPAY_DETAILS)),
+                element::content($this->translator->translate(ClientViewFieldsEpos::WEBPAY_DETAILS)),
                 element::br());
 
         $ret .= $this->elementWebpayTabContentResultMsg($status);
@@ -406,7 +406,7 @@ class CompletionPanel
             $ret .=
                 element::div(
                     attribute::id("webpay_message_unavailable"),
-                    element::content($this->translator->translate(ViewFields::WEBPAY_MSG_UNAVAILABLE)));
+                    element::content($this->translator->translate(ClientViewFieldsEpos::WEBPAY_MSG_UNAVAILABLE)));
         }
         return $ret;
     }
@@ -418,13 +418,13 @@ class CompletionPanel
                 element::div(
                     attribute::clazz($this->getCssClass4MsgSuccess()),
                     attribute::id("webpay_message"),
-                    element::content($this->translator->translate(ViewFields::WEBPAY_MSG_SUCCESS)));
+                    element::content($this->translator->translate(ClientViewFieldsEpos::WEBPAY_MSG_SUCCESS)));
         } elseif (self::STATUS_FAILED == $status) {
             return
                 element::div(
                     attribute::clazz($this->getCssClass4MsgUnsuccess()),
                     attribute::id("webpay_message"),
-                    element::content($this->translator->translate(ViewFields::WEBPAY_MSG_UNSUCCESS)));
+                    element::content($this->translator->translate(ClientViewFieldsEpos::WEBPAY_MSG_UNSUCCESS)));
         } else
             return "";
     }

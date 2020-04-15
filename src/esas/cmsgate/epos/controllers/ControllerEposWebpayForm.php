@@ -8,15 +8,13 @@
 
 namespace esas\cmsgate\epos\controllers;
 
-use esas\cmsgate\epos\protocol\EposProtocol;
 use esas\cmsgate\epos\protocol\EposProtocolFactory;
 use esas\cmsgate\epos\protocol\EposWebPayRq;
 use esas\cmsgate\epos\protocol\EposWebPayRs;
-use esas\cmsgate\epos\protocol\IiiProtocol;
 use esas\cmsgate\Registry;
 use esas\cmsgate\epos\RegistryEpos;
 use esas\cmsgate\epos\utils\RequestParamsEpos;
-use esas\cmsgate\epos\view\client\ViewFields;
+use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
 use esas\cmsgate\wrappers\OrderWrapper;
 use Exception;
 use Throwable;
@@ -36,7 +34,7 @@ class ControllerEposWebpayForm extends ControllerEpos
             $webPayRq->setInvoiceId($orderWrapper->getExtId());
             $webPayRq->setReturnUrl($this->generateSuccessReturnUrl($orderWrapper));
             $webPayRq->setCancelReturnUrl($this->generateUnsuccessReturnUrl($orderWrapper));
-            $webPayRq->setButtonLabel(Registry::getRegistry()->getTranslator()->translate(ViewFields::WEBPAY_BUTTON_LABEL));
+            $webPayRq->setButtonLabel(Registry::getRegistry()->getTranslator()->translate(ClientViewFieldsEpos::WEBPAY_BUTTON_LABEL));
             $webPayRs = EposProtocolFactory::getProtocol()->getWebpayForm($webPayRq);
             $this->logger->info($loggerMainString . "Controller ended");
             return $webPayRs;

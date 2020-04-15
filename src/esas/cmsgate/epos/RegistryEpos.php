@@ -10,7 +10,7 @@ namespace esas\cmsgate\epos;
 
 
 use esas\cmsgate\Registry;
-use esas\cmsgate\epos\view\client\CompletionPanel;
+use esas\cmsgate\epos\view\client\CompletionPanelEpos;
 use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
 
 /**
@@ -36,7 +36,7 @@ abstract class RegistryEpos extends Registry
 
     public function getCompletionPanel($orderWrapper)
     {
-        $completionPanel = new CompletionPanel($orderWrapper);
+        $completionPanel = new CompletionPanelEpos($orderWrapper);
         return $completionPanel;
     }
 
@@ -44,5 +44,5 @@ abstract class RegistryEpos extends Registry
         return "epos";
     }
 
-
+    abstract function getUrlWebpay($orderId);
 }

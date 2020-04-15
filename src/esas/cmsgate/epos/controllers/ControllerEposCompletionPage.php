@@ -10,7 +10,7 @@ namespace esas\cmsgate\epos\controllers;
 
 use esas\cmsgate\epos\utils\QRUtils;
 use esas\cmsgate\epos\utils\RequestParamsEpos;
-use esas\cmsgate\epos\view\client\CompletionPanel;
+use esas\cmsgate\epos\view\client\CompletionPanelEpos;
 use Exception;
 use Throwable;
 
@@ -18,7 +18,7 @@ class ControllerEposCompletionPage extends ControllerEpos
 {
     /**
      * @param $orderId
-     * @return CompletionPanel
+     * @return CompletionPanelEpos
      * @throws Throwable
      */
     public function process($orderId)

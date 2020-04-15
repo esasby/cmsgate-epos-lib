@@ -1,7 +1,7 @@
 <?php
 
 use esas\cmsgate\epos\ConfigFieldsEpos;
-use esas\cmsgate\epos\view\client\ViewFields;
+use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
 use esas\cmsgate\view\admin\AdminViewFields;
 
 return array(
@@ -74,8 +74,8 @@ return array(
     ConfigFieldsEpos::dueInterval() => 'Срок действия счета (дней)',
     ConfigFieldsEpos::dueInterval() . _DESC => 'Как долго счет, будет доступен в EPOS для оплаты',
 
-    ViewFields::INSTRUCTIONS_TAB_LABEL => 'Инструкция по оплате счета в EPOS',
-    ViewFields::INSTRUCTIONS => '<p>Для оплаты счета в EPOS необходимо:</p>
+    ClientViewFieldsEpos::INSTRUCTIONS_TAB_LABEL => 'Инструкция по оплате счета в EPOS',
+    ClientViewFieldsEpos::INSTRUCTIONS => '<p>Для оплаты счета в EPOS необходимо:</p>
 <ol>
     <li>Выбрать дерево платежей ЕРИП</li>
     <li>Выбрать услугу: <strong>Сервис EPOS</strong></li>
@@ -85,16 +85,16 @@ return array(
 </ol>',
 
 
-    ViewFields::QRCODE_TAB_LABEL => 'Оплата по QR-коду',
-    ViewFields::QRCODE_DETAILS => '<p>Оплатить счет через банковское мобильное приложение по QR-коду:</p><div align="center">@qr_code</div><p>Информация о мобильных приложениях, поддерживающих сервис оплаты по QR-коду (платёжной ссылке), <a href="http://pay.raschet.by/" target="_blank"
+    ClientViewFieldsEpos::QRCODE_TAB_LABEL => 'Оплата по QR-коду',
+    ClientViewFieldsEpos::QRCODE_DETAILS => '<p>Оплатить счет через банковское мобильное приложение по QR-коду:</p><div align="center">@qr_code</div><p>Информация о мобильных приложениях, поддерживающих сервис оплаты по QR-коду (платёжной ссылке), <a href="http://pay.raschet.by/" target="_blank"
 style="color: #8c2003;"><span>здесь</span></a></p>',
 
-    ViewFields::WEBPAY_TAB_LABEL => 'Оплатить картой',
-    ViewFields::WEBPAY_DETAILS => 'Вы можете оплатить счет с помощью карты Visa, Mastercard или Белкарт через систему электронных платежей WEBPAY',
-    ViewFields::WEBPAY_BUTTON_LABEL => 'Перейти к оплате',
-    ViewFields::WEBPAY_MSG_SUCCESS => 'Счет успешно оплачен через сервис WebPay',
-    ViewFields::WEBPAY_MSG_UNSUCCESS => 'Ошибка оплаты счета через сервис WebPay',
-    ViewFields::WEBPAY_MSG_UNAVAILABLE => 'Извините, операция временно недоступна',
+    ClientViewFieldsEpos::WEBPAY_TAB_LABEL => 'Оплатить картой',
+    ClientViewFieldsEpos::WEBPAY_DETAILS => 'Вы можете оплатить счет с помощью карты Visa, Mastercard или Белкарт через систему электронных платежей WEBPAY',
+    ClientViewFieldsEpos::WEBPAY_BUTTON_LABEL => 'Перейти к оплате',
+    ClientViewFieldsEpos::WEBPAY_MSG_SUCCESS => 'Счет успешно оплачен через сервис WebPay',
+    ClientViewFieldsEpos::WEBPAY_MSG_UNSUCCESS => 'Ошибка оплаты счета через сервис WebPay',
+    ClientViewFieldsEpos::WEBPAY_MSG_UNAVAILABLE => 'Извините, операция временно недоступна',
 
     AdminViewFields::ADMIN_PAYMENT_METHOD_NAME => 'EPOS',
     AdminViewFields::ADMIN_PAYMENT_METHOD_DESCRIPTION => 'Оплата через сервис EPOS',
