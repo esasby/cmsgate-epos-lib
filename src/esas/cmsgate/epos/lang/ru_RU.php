@@ -24,7 +24,7 @@ return array(
     ConfigFieldsEpos::eposRetailOutletCode() . _DESC => 'Код торговой точки',
 
     ConfigFieldsEpos::eposEsasConnector() => 'Подключение к ESAS',
-    ConfigFieldsEpos::eposEsasConnector() . _DESC => 'Поставщик услаг Подлючение к ООО "Электронные Системы и Сервисы". Иначе счета будут выставлятся через ООО "Универсальные Платежные Системы"',
+    ConfigFieldsEpos::eposEsasConnector() . _DESC => 'Поставщик услаг подлючен к ООО "Электронные Системы и Сервисы". Иначе счета будут выставлятся через ООО "Универсальные Платежные Системы"',
 
     ConfigFieldsEpos::sandbox() => 'Sandbox',
     ConfigFieldsEpos::sandbox() . _DESC => 'Режим *песочницы*. Если включен, то все счета буду выставляться в тестовой системе api-dev.hgrosh.by',
@@ -49,7 +49,7 @@ return array(
     ConfigFieldsEpos::completionCssFile() => 'CSS файл для итогового экрана',
     ConfigFieldsEpos::completionCssFile() . _DESC => 'Позволяет задать путь к CSS файлу для экрана успешного выставления счета',
 
-    ConfigFieldsEpos::paymentMethodName() => 'Название способы оплаты',
+    ConfigFieldsEpos::paymentMethodName() => 'Название способа оплаты',
     ConfigFieldsEpos::paymentMethodName() . _DESC => 'Название, отображаемое клиенту, при выборе способа оплаты',
     ConfigFieldsEpos::paymentMethodName() . _DEFAULT => 'Через систему EPOS',
 
