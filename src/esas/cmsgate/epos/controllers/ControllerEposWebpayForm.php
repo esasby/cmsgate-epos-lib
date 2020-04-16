@@ -52,12 +52,12 @@ class ControllerEposWebpayForm extends ControllerEpos
      */
     public function generateSuccessReturnUrl(OrderWrapper $orderWrapper)
     {
-        return RegistryEpos::getRegistry()->getConfigWrapper()->getUrlWebpay($orderWrapper->getOrderId()) . '&' . RequestParamsEpos::WEBPAY_STATUS . '=payed';
+        return RegistryEpos::getRegistry()->getUrlWebpay($orderWrapper->getOrderId()) . '&' . RequestParamsEpos::WEBPAY_STATUS . '=payed';
     }
 
     public function generateUnsuccessReturnUrl(OrderWrapper $orderWrapper)
     {
-        return RegistryEpos::getRegistry()->getConfigWrapper()->getUrlWebpay($orderWrapper->getOrderId()) . '&' . RequestParamsEpos::WEBPAY_STATUS . '=failed';
+        return RegistryEpos::getRegistry()->getUrlWebpay($orderWrapper->getOrderId()) . '&' . RequestParamsEpos::WEBPAY_STATUS . '=failed';
     }
 
 }

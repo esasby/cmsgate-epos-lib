@@ -58,6 +58,8 @@ class ManagedFieldsEpos extends ManagedFields
         $this->registerField(
             (new ConfigFieldCheckbox(ConfigFieldsEpos::eposEsasConnector())));
         $this->registerField(
+            (new ConfigFieldCheckbox(ConfigFieldsEpos::debugMode())));
+        $this->registerField(
             (new ConfigFieldCheckbox(ConfigFieldsEpos::sandbox())));
         $this->registerField(
             (new ConfigFieldNumber(ConfigFieldsEpos::dueInterval()))

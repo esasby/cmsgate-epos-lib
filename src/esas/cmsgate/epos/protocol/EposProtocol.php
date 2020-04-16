@@ -9,7 +9,6 @@ use esas\cmsgate\protocol\ProtocolCurl;
 use esas\cmsgate\protocol\ProtocolError;
 use esas\cmsgate\protocol\RqMethod;
 use esas\cmsgate\protocol\RsType;
-use esas\cmsgate\utils\Logger;
 use Exception;
 use Throwable;
 
@@ -38,7 +37,6 @@ class EposProtocol extends ProtocolCurl
             self::EPOS_URL_TEST);
         $this->authToken = $authToken;
     }
-
 
 
     /**
@@ -123,7 +121,7 @@ class EposProtocol extends ProtocolCurl
             $postData['successReturnUrl'] = htmlspecialchars($webPayRq->getReturnUrl());
             $postData['cancelReturnUrl'] = htmlspecialchars($webPayRq->getCancelReturnUrl());
             $postData['submitValue'] = $webPayRq->getButtonLabel();
-            $postData['isTestMode'] = RegistryEpos::getRegistry()->getConfigWrapper()->isSandbox();
+            $postData['isTestMode'] = (RegistryEpos::getRegistry()->getConfigWrapper()->isSandbox() ? "true" : "false");
             $resStr = $this->requestPost('v1/pay/webpay', json_encode($postData), RsType::_STRING);
             $resXml = simplexml_load_string($resStr, null, LIBXML_NOCDATA);
             if ($resXml == null) {
@@ -245,14 +243,10 @@ class EposProtocol extends ProtocolCurl
             $headers = array();
             $headers[] = 'Content-Type: application/json';
             $headers[] = 'Authorization: Bearer ' . $this->authToken;
-            $this->ch = curl_init();
-            curl_setopt($this->ch, CURLOPT_URL, $url);
+            $this->defaultCurlInit($url);
             curl_setopt($this->ch, CURLOPT_HEADER, false); // включение заголовков в выводе
-            curl_setopt($this->ch, CURLOPT_CONNECTTIMEOUT, 30);
-            curl_setopt($this->ch, CURLOPT_VERBOSE, true); // вывод доп. информации в STDERR
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false); // не проверять сертификат узла сети
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false); // проверка существования общего имени в сертификате SSL
-            curl_setopt($this->ch, CURLOPT_RETURNTRANSFER, true); // возврат результата вместо вывода на экран
             switch ($rqMethod) {
                 case RqMethod::_GET:
                     $headers[] = 'Content-Length: ' . strlen($data);
@@ -272,11 +266,7 @@ class EposProtocol extends ProtocolCurl
             if (is_array($logStr))
                 $logStr = json_encode($logStr);
             $this->logger->info('Sending ' . RqMethod::toString($rqMethod) . ' request[' . preg_replace('/(<pwd>).*(<\/pwd>)/', '$1********$2', $logStr) . "] to url[" . $url . "]");
-            $response = curl_exec($this->ch);
-            $this->logger->info('Got response[' . $response . "]");
-            if (curl_errno($this->ch)) {
-                throw new Exception(curl_error($this->ch), curl_errno($this->ch));
-            }
+            $response = $this->execCurlAndLog();
         } finally {
             curl_close($this->ch);
         }
