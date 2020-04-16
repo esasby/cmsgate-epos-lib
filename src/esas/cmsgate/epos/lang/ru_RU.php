@@ -24,7 +24,7 @@ return array(
     ConfigFieldsEpos::eposRetailOutletCode() . _DESC => 'Код торговой точки',
 
     ConfigFieldsEpos::eposEsasConnector() => 'Подключение к ESAS',
-    ConfigFieldsEpos::eposEsasConnector() . _DESC => 'Поставщик услаг подлючен к ООО "Электронные Системы и Сервисы". Иначе счета будут выставлятся через ООО "Универсальные Платежные Системы"',
+    ConfigFieldsEpos::eposEsasConnector() . _DESC => 'Поставщик услаг подлючен к ООО "Электронные Системы и Сервисы". Иначе счета будут выставляться через ООО "Универсальные Платежные Системы"',
 
     ConfigFieldsEpos::sandbox() => 'Sandbox',
     ConfigFieldsEpos::sandbox() . _DESC => 'Режим *песочницы*. Если включен, то все счета буду выставляться в тестовой системе api-dev.hgrosh.by',
