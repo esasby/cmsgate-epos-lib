@@ -13,9 +13,7 @@ use esas\cmsgate\utils\RequestParams;
 
 class RequestParamsEpos extends RequestParams
 {
-//    const BILL_ID = "bill_id";
-//    const PHONE = "phone";
-//    const PURCHASE_ID = "purchaseid"; // не менять, т.к. приходит с ХГ
-    const ORDER_NUMBER = "order_number";
+    const INVOICE_ID = "invoice_id";
+    const EPOS_STATUS = "epos_status";
     const WEBPAY_STATUS = "webpay_status";
 }
