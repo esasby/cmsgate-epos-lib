@@ -17,18 +17,19 @@ use esas\cmsgate\view\admin\fields\ConfigFieldRichtext;
 use esas\cmsgate\view\admin\fields\ConfigFieldStatusList;
 use esas\cmsgate\view\admin\fields\ConfigFieldText;
 use esas\cmsgate\view\admin\ManagedFields;
+use esas\cmsgate\view\admin\ManagedFieldsFactory;
 use esas\cmsgate\view\admin\validators\ValidatorEmail;
 use esas\cmsgate\view\admin\validators\ValidatorImpl;
 use esas\cmsgate\view\admin\validators\ValidatorInteger;
 use esas\cmsgate\view\admin\validators\ValidatorNotEmpty;
 use esas\cmsgate\view\admin\validators\ValidatorNumeric;
 
-class ManagedFieldsEpos extends ManagedFields
+class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
 {
         /**
      * ManagedFieldsEpos constructor.
      */
-    public function __construct()
+    public function initFields()
     {
         parent::__construct();
         $this->registerField(
@@ -94,6 +95,8 @@ class ManagedFieldsEpos extends ManagedFields
                 ->setValidator(new ValidatorNotEmpty()));
 
     }
+
+
 }
 
 
