@@ -31,7 +31,6 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
      */
     public function initFields()
     {
-        parent::__construct();
         $this->registerField(
             (new ConfigFieldText(ConfigFieldsEpos::shopName()))
                 ->setValidator(new ValidatorNotEmpty())
