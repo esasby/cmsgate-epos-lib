@@ -57,7 +57,7 @@ class EposProtocol extends ProtocolCurl
             $postData['merchantInfo']['retailOutlet']['code'] = RegistryEpos::getRegistry()->getConfigWrapper()->getEposRetailOutletCode();
             $postData['number'] = $invoiceAddRq->getOrderNumber();
             $postData['currency'] = $invoiceAddRq->getAmount()->getCurrencyNumcode();
-            $postData['dateInAirUTC'] = date("Y-m-d\TH:i:s.u");
+            $postData['dateInAirUTC'] = gmdate("Y-m-d\TH:i:s.u");
             $postData['paymentDueTerms']['termsDay'] = $invoiceAddRq->getDueInterval();
             $postData['billingInfo']['contact']['fullName'] = $invoiceAddRq->getFullName();
             $postData['billingInfo']['phone']['fullNumber'] = $invoiceAddRq->getMobilePhone();
