@@ -49,7 +49,7 @@ return array(
 
     ConfigFieldsEpos::paymentMethodName() => 'Payment method name',
     ConfigFieldsEpos::paymentMethodName() . _DESC => 'Name displayed to the customer when choosing a payment method',
-    ConfigFieldsEpos::paymentMethodName() . _DEFAULT => 'EPOS',
+    ConfigFieldsEpos::paymentMethodName() . _DEFAULT => 'EPOS (invoicing to ERIP)',
 
     ConfigFieldsEpos::paymentMethodDetails() => 'Payment method details',
     ConfigFieldsEpos::paymentMethodDetails() . _DESC => 'Description of the payment method that will be shown to the client at the time of payment',

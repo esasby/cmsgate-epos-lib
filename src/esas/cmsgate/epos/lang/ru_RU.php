@@ -51,7 +51,7 @@ return array(
 
     ConfigFieldsEpos::paymentMethodName() => 'Название способа оплаты',
     ConfigFieldsEpos::paymentMethodName() . _DESC => 'Название, отображаемое клиенту, при выборе способа оплаты',
-    ConfigFieldsEpos::paymentMethodName() . _DEFAULT => 'Через систему EPOS',
+    ConfigFieldsEpos::paymentMethodName() . _DEFAULT => 'EPOS (оплата через ЕРИП)',
 
     ConfigFieldsEpos::paymentMethodDetails() => 'Описание способа оплаты',
     ConfigFieldsEpos::paymentMethodDetails() . _DESC => 'Описание, отображаемое клиенту, при выборе способа оплаты',
