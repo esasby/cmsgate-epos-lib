@@ -6,10 +6,7 @@ use esas\cmsgate\epos\protocol\EposInvoiceGetRq;
 use esas\cmsgate\epos\protocol\EposInvoiceGetRs;
 use esas\cmsgate\epos\protocol\EposProtocol;
 use esas\cmsgate\epos\protocol\EposProtocolFactory;
-use esas\cmsgate\epos\protocol\IiiProtocol;
 use esas\cmsgate\epos\RegistryEpos;
-use esas\cmsgate\Registry;
-use esas\cmsgate\epos\utils\RequestParamsEpos;
 use esas\cmsgate\utils\StringUtils;
 use esas\cmsgate\wrappers\OrderWrapper;
 use Exception;
@@ -34,24 +31,24 @@ class ControllerEposCallback extends ControllerEpos
     protected $eposInvoiceGetRs;
 
     /**
-     * @param $invoiceId
+     * @param $callbackRq
+     * @return EposInvoiceGetRs
      * @throws Exception
      */
     public function process()
     {
         try {
-            $callbackData = json_decode(file_get_contents('php://input'), true);
-            $invoiceId = $callbackData["id"];
-            $loggerMainString = "Invoice[" . $invoiceId . "]: ";
+            $callbackRq = EposProtocol::readCallback();
+            $loggerMainString = "Invoice[" . $callbackRq->getInvoiceId() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
-            if (empty($invoiceId))
-                throw new Exception('Wrong invoiceId[' . $invoiceId . "]");
+            if (empty($callbackRq->getInvoiceId()))
+                throw new Exception('Wrong invoiceId[' . $callbackRq->getInvoiceId() . "]");
             $this->logger->info($loggerMainString . "Loading order data from EPOS service...");
-            $this->eposInvoiceGetRs = EposProtocolFactory::getProtocol()->getInvoice(new EposInvoiceGetRq($invoiceId));
+            $this->eposInvoiceGetRs = EposProtocolFactory::getProtocol()->getInvoice(new EposInvoiceGetRq($callbackRq->getInvoiceId()));
             if ($this->eposInvoiceGetRs->hasError())
                 throw new Exception($this->eposInvoiceGetRs->getResponseMessage(), $this->eposInvoiceGetRs->getResponseCode());
             $this->logger->info($loggerMainString . 'Loading local order object for id[' . $this->eposInvoiceGetRs->getOrderNumber() . "]");
-            $this->localOrderWrapper = RegistryEpos::getRegistry()->getOrderWrapperByExtId($invoiceId);
+            $this->localOrderWrapper = RegistryEpos::getRegistry()->getOrderWrapperByExtId($callbackRq->getInvoiceId());
             if (empty($this->localOrderWrapper))
                 throw new Exception('Can not load order info for id[' . $this->eposInvoiceGetRs->getOrderNumber() . "]");
             if (!$this->configWrapper->isSandbox() // на тестовой системе это пока не работает
@@ -80,6 +77,8 @@ class ControllerEposCallback extends ControllerEpos
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
         } catch (Exception $e) { // для совместимости с php 5
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
+        } finally {
+            return $this->eposInvoiceGetRs;
         }
     }
 

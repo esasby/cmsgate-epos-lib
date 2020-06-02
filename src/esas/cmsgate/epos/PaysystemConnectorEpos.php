@@ -9,6 +9,9 @@
 namespace esas\cmsgate\epos;
 
 
+use esas\cmsgate\descriptors\PaySystemConnectorDescriptor;
+use esas\cmsgate\descriptors\VendorDescriptor;
+use esas\cmsgate\descriptors\VersionDescriptor;
 use esas\cmsgate\epos\lang\TranslatorEpos;
 use esas\cmsgate\epos\view\admin\ManagedFieldsFactoryEpos;
 use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
@@ -34,5 +37,17 @@ class PaysystemConnectorEpos extends PaysystemConnector
     public function createManagedFieldsFactory()
     {
         return new ManagedFieldsFactoryEpos();
+    }
+
+    public function createPaySystemConnectorDescriptor()
+    {
+        return new PaySystemConnectorDescriptor(
+            "cmsgate-epos-lib",
+            new VersionDescriptor("v1.10.0", "2020-06-02"),
+            "EPOS (ERIP Belarus) cmsgate connector",
+            "www.epos.by",
+            VendorDescriptor::esas(),
+            "epos"
+        );
     }
 }

@@ -273,4 +273,18 @@ class EposProtocol extends ProtocolCurl
         return $this->convertRs($response, $rsType);
     }
 
+    /**
+     * @return EposCallbackRq
+     */
+    public static function readCallback()
+    {
+        $callbackRq = $_SESSION["epos_callback_rq"];
+        if ($callbackRq == null) {
+            $callbackData = json_decode(file_get_contents('php://input'), true);
+            $callbackRq = new EposCallbackRq($callbackData["id"]);
+            $_SESSION["epos_callback_rq"] = $callbackRq; //сохраняем в сессии, т.к. file_get_contents('php://input') не всегда корректно читается несколько раз
+        }
+        return $callbackRq;
+    }
+
 }
