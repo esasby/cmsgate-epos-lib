@@ -9,6 +9,7 @@ use esas\cmsgate\protocol\ProtocolCurl;
 use esas\cmsgate\protocol\ProtocolError;
 use esas\cmsgate\protocol\RqMethod;
 use esas\cmsgate\protocol\RsType;
+use esas\cmsgate\utils\CMSGateException;
 use Exception;
 use Throwable;
 
@@ -201,7 +202,7 @@ class EposProtocol extends ProtocolCurl
             } elseif (array_key_exists('code', $resArray) && $resArray['code'] != '0') {
                 throw new Exception($resArray['message'], $resArray['code']);
             }
-            $resp->setResponseCode($resArray['status']);
+            $resp->setResponseCode("0");
             $resp->setInvoiceId($resArray["id"]);
             $resp->setOrderNumber($resArray["number"]);
             $resp->setEposServiceCode($resArray['merchantInfo']['serviceId']);
@@ -275,15 +276,17 @@ class EposProtocol extends ProtocolCurl
 
     /**
      * @return EposCallbackRq
+     * @throws CMSGateException
      */
     public static function readCallback()
     {
         $callbackRq = $_SESSION["epos_callback_rq"];
         if ($callbackRq == null) {
             $callbackData = json_decode(file_get_contents('php://input'), true);
-            $callbackRq = new EposCallbackRq($callbackData["id"]);
+            $callbackRq = new EposCallbackRq($callbackData["id"], $callbackData["claimId"]);
             $_SESSION["epos_callback_rq"] = $callbackRq; //сохраняем в сессии, т.к. file_get_contents('php://input') не всегда корректно читается несколько раз
         }
+        CMSGateException::throwIfNull($callbackRq, "Can not read callback rq");
         return $callbackRq;
     }
 

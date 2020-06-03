@@ -188,18 +188,24 @@ class EposInvoiceGetRs extends EposRs
         $this->status = trim($status);
     }
 
+    const STATUS_DRAFT = 0;
+    const STATUS_ACTIVE = 10;
+    const STATUS_PAYED = 20;
+    const STATUS_DELETED = 30;
+    const STATUS_VERIFIED = 70;
+
     public function isStatusPayed()
     {
-        return in_array($this->status, array('Payed', 'Verified'));
+        return in_array($this->status, array(self::STATUS_PAYED, self::STATUS_VERIFIED));
     }
 
     public function isStatusCanceled()
     {
-        return in_array($this->status, array('Deleted'));
+        return in_array($this->status, array(self::STATUS_DELETED));
     }
 
     public function isStatusPending()
     {
-        return in_array($this->status, array('Active'));
+        return in_array($this->status, array(self::STATUS_ACTIVE));
     }
 }
