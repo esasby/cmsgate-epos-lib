@@ -13,6 +13,7 @@ use esas\cmsgate\protocol\Amount;
 
 class EposInvoiceGetRs extends EposRs
 {
+    private $parentId;
     private $invoiceId;
     private $eposServiceCode;
     private $orderNumber;
@@ -26,6 +27,22 @@ class EposInvoiceGetRs extends EposRs
     private $amount;
     private $products;
     private $status;
+
+    /**
+     * @return mixed
+     */
+    public function getParentId()
+    {
+        return $this->parentId;
+    }
+
+    /**
+     * @param mixed $parentId
+     */
+    public function setParentId($parentId)
+    {
+        $this->parentId = $parentId;
+    }
 
     /**
      * @return string

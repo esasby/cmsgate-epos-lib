@@ -203,6 +203,7 @@ class EposProtocol extends ProtocolCurl
                 throw new Exception($resArray['message'], $resArray['code']);
             }
             $resp->setResponseCode("0");
+            $resp->setParentId($resArray["parentId"]);
             $resp->setInvoiceId($resArray["id"]);
             $resp->setOrderNumber($resArray["number"]);
             $resp->setEposServiceCode($resArray['merchantInfo']['serviceId']);
