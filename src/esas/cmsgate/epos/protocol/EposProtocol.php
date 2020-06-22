@@ -196,7 +196,7 @@ class EposProtocol extends ProtocolCurl
         $loggerMainString = "Invoice[" . $invoiceGetRq->getInvoiceId() . "]: ";
         try {// запрос
             $this->logger->debug($loggerMainString . "getInvoice started");
-            $resArray = $this->requestGet('/v1/invoicing/invoice/' . $invoiceGetRq->getInvoiceId(), '', RsType::_ARRAY);
+            $resArray = $this->requestGet('v1/invoicing/invoice/' . $invoiceGetRq->getInvoiceId(), '', RsType::_ARRAY);
             if (empty($resArray)) {
                 throw new Exception("Wrong message format", EposRs::ERROR_RESP_FORMAT);
             } elseif (array_key_exists('code', $resArray) && $resArray['code'] != '0') {

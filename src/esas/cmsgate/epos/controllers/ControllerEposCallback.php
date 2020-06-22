@@ -50,8 +50,7 @@ class ControllerEposCallback extends ControllerEpos
             if (empty($this->localOrderWrapper))
                 throw new Exception('Can not load order info for id[' . $this->eposInvoiceGetRs->getOrderNumber() . "]");
             if (!$this->configWrapper->isSandbox() // на тестовой системе это пока не работает
-                && (!StringUtils::compare($this->eposInvoiceGetRs->getFullName(), $this->localOrderWrapper->getFullName())
-                    || !$this->eposInvoiceGetRs->getAmount()->isEqual($this->localOrderWrapper->getAmountObj()))) {
+                && !$this->eposInvoiceGetRs->getAmount()->isEqual($this->localOrderWrapper->getAmountObj())) {
                 throw new Exception("Unmapped purchaseid: localFullname[" . $this->localOrderWrapper->getFullName()
                     . "], remoteFullname[" . $this->eposInvoiceGetRs->getFullName()
                     . "], localAmount[" . $this->localOrderWrapper->getAmountObj()
