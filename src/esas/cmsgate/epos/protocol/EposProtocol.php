@@ -18,8 +18,8 @@ use Throwable;
  */
 class EposProtocol extends ProtocolCurl
 {
-    const EPOS_URL_REAL_ESAS = 'https://api.e-pos.by/public/'; // рабочий
-    const EPOS_URL_REAL_HG = 'https://api-epos.hgrosh.by/public/'; // рабочий
+    const EPOS_URL_REAL_UPS = 'https://api.e-pos.by/public/'; // рабочий
+    const EPOS_URL_REAL_ESAS= 'https://api-epos.hgrosh.by/public/'; // рабочий
     const EPOS_URL_TEST = 'https://api-dev.hgrosh.by/epos/public/'; // тестовый
 
     /**
@@ -34,7 +34,7 @@ class EposProtocol extends ProtocolCurl
     public function __construct($authToken)
     {
         parent::__construct(
-            RegistryEpos::getRegistry()->getConfigWrapper()->isEposEsasConnector() ? self::EPOS_URL_REAL_ESAS : self::EPOS_URL_REAL_HG,
+            RegistryEpos::getRegistry()->getConfigWrapper()->isEposEsasConnector() ? self::EPOS_URL_REAL_ESAS : self::EPOS_URL_REAL_UPS,
             self::EPOS_URL_TEST);
         $this->authToken = $authToken;
     }
