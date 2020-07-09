@@ -17,6 +17,7 @@ use esas\cmsgate\epos\view\admin\ManagedFieldsFactoryEpos;
 use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
 use esas\cmsgate\PaysystemConnector;
 use esas\cmsgate\view\admin\ManagedFieldsFactory;
+use esas\cmsgate\wrappers\OrderWrapper;
 
 class PaysystemConnectorEpos extends PaysystemConnector
 {
@@ -43,11 +44,20 @@ class PaysystemConnectorEpos extends PaysystemConnector
     {
         return new PaySystemConnectorDescriptor(
             "cmsgate-epos-lib",
-            new VersionDescriptor("v1.10.4", "2020-06-03"),
+            new VersionDescriptor("v1.11.0", "2020-07-09"),
             "EPOS (ERIP Belarus) cmsgate connector",
             "www.epos.by",
             VendorDescriptor::esas(),
             "epos"
         );
+    }
+
+    /**
+     * @param OrderWrapper $orderWrapper
+     * @return string
+     */
+    public static function getInvoiceId($orderWrapper) {
+        $configWrapper = RegistryEpos::getRegistry()->getConfigWrapper();
+        return $configWrapper->getEposServiceProviderCode() . '-' . $configWrapper->getEposServiceCode() . '-' . $orderWrapper->getOrderNumber();
     }
 }

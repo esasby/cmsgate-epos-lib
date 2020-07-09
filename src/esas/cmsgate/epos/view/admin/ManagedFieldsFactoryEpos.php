@@ -11,14 +11,13 @@ namespace esas\cmsgate\epos\view\admin;
 
 use esas\cmsgate\epos\ConfigFieldsEpos;
 use esas\cmsgate\view\admin\fields\ConfigFieldCheckbox;
+use esas\cmsgate\view\admin\fields\ConfigFieldList;
 use esas\cmsgate\view\admin\fields\ConfigFieldNumber;
 use esas\cmsgate\view\admin\fields\ConfigFieldPassword;
 use esas\cmsgate\view\admin\fields\ConfigFieldRichtext;
 use esas\cmsgate\view\admin\fields\ConfigFieldStatusList;
 use esas\cmsgate\view\admin\fields\ConfigFieldText;
-use esas\cmsgate\view\admin\ManagedFields;
 use esas\cmsgate\view\admin\ManagedFieldsFactory;
-use esas\cmsgate\view\admin\validators\ValidatorEmail;
 use esas\cmsgate\view\admin\validators\ValidatorImpl;
 use esas\cmsgate\view\admin\validators\ValidatorInteger;
 use esas\cmsgate\view\admin\validators\ValidatorNotEmpty;
@@ -26,7 +25,7 @@ use esas\cmsgate\view\admin\validators\ValidatorNumeric;
 
 class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
 {
-        /**
+    /**
      * ManagedFieldsEpos constructor.
      */
     public function initFields()
@@ -56,7 +55,10 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
                 ->setValidator(new ValidatorNumeric())
                 ->setRequired(true));
         $this->registerField(
-            (new ConfigFieldCheckbox(ConfigFieldsEpos::eposEsasConnector())));
+            (new ConfigFieldList(ConfigFieldsEpos::eposProcessor()))
+                ->addOption(AdminViewFieldsEpos::EPOS_PROCESSOR_ESAS)
+                ->addOption(AdminViewFieldsEpos::EPOS_PROCESSOR_UPS)
+                ->addOption(AdminViewFieldsEpos::EPOS_PROCESSOR_RRB));
         $this->registerField(
             (new ConfigFieldCheckbox(ConfigFieldsEpos::debugMode())));
         $this->registerField(

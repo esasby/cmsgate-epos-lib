@@ -14,7 +14,7 @@ use Exception;
 class IiiProtocol extends ProtocolCurl
 {
     const III_URL_REAL = 'https://iii.by/connect/token'; // рабочий
-    const III_URL_TEST = 'https://dev.iii.by/connect/token'; // тестовый
+    const III_URL_TEST = 'https://ids.iii.by/connect/token'; // тестовый
 
     /**
      * @throws Exception
@@ -36,7 +36,7 @@ class IiiProtocol extends ProtocolCurl
         try {
             if ($authRq == null)
                 $authRq = new IiiAuthRq(RegistryEpos::getRegistry()->getConfigWrapper()->getIiiClientId(), RegistryEpos::getRegistry()->getConfigWrapper()->getIiiClientSecret());
-            $this->logger->info("Logging in: host[" . $this->connectionUrl . "],  clientId[" . $authRq->getClientId() . "]");
+            $this->logger->info("Logging in: host[" . $this->connectionUrl . "], clientId[" . $authRq->getClientId() . "]");
             if (empty($authRq->getClientId()) || empty($authRq->getClientSecret())) {
                 throw new Exception("Ошибка конфигурации! Не задан clientId или clientSecret", EposRs::ERROR_CONFIG);
             }

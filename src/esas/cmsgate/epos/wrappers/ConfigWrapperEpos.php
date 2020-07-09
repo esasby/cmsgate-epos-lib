@@ -9,6 +9,8 @@
 namespace esas\cmsgate\epos\wrappers;
 
 use esas\cmsgate\epos\ConfigFieldsEpos;
+use esas\cmsgate\epos\PaysystemConnectorEpos;
+use esas\cmsgate\epos\view\admin\AdminViewFieldsEpos;
 use esas\cmsgate\Registry;
 use esas\cmsgate\wrappers\ConfigWrapper;
 
@@ -92,9 +94,13 @@ class ConfigWrapperEpos extends ConfigWrapper
      * ПУ под подклюен к esas или к hg
      * @return string
      */
-    public function isEposEsasConnector()
+    public function getEposProcessor()
     {
-        return $this->checkOn(ConfigFieldsEpos::eposEsasConnector());
+        $ret = $this->getConfig(ConfigFieldsEpos::eposProcessor());
+        if ($ret == null || $ret == '') { // legacy
+            return $this->checkOn(ConfigFieldsEpos::getCmsRelatedKey("epos_esas_connector")) ? AdminViewFieldsEpos::EPOS_PROCESSOR_ESAS : AdminViewFieldsEpos::EPOS_PROCESSOR_UPS; 
+        } else
+            return $ret;
     }
 
     /**
@@ -155,8 +161,8 @@ class ConfigWrapperEpos extends ConfigWrapper
                 return $this->getEposServiceCode();
             case ConfigFieldsEpos::eposRetailOutletCode():
                 return $this->getEposRetailOutletCode();
-            case ConfigFieldsEpos::eposEsasConnector():
-                return $this->isEposEsasConnector();
+            case ConfigFieldsEpos::eposProcessor():
+                return $this->getEposProcessor();
             case ConfigFieldsEpos::instructionsSection():
                 return $this->isInstructionsSectionEnabled();
             case ConfigFieldsEpos::qrcodeSection():
@@ -177,8 +183,10 @@ class ConfigWrapperEpos extends ConfigWrapper
     public function cookText($text, $orderWrapper)
     {
         $text = parent::cookText($text, $orderWrapper);
+        $invoiceId = PaysystemConnectorEpos::getInvoiceId($orderWrapper);
         return strtr($text, array(
-            "@epos_order_id" => $this->getEposServiceProviderCode() . '-' . $this->getEposServiceCode() . '-' . $orderWrapper->getOrderNumber()
+            "@epos_order_id" => $invoiceId,
+            "@epos_invoice_id" => $invoiceId
         ));
     }
 

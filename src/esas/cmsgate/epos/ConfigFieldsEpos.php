@@ -43,9 +43,9 @@ class ConfigFieldsEpos extends ConfigFields
         return self::getCmsRelatedKey("epos_retail_outlet_code");
     }
 
-    public static function eposEsasConnector()
+    public static function eposProcessor()
     {
-        return self::getCmsRelatedKey("epos_esas_connector");
+        return self::getCmsRelatedKey("epos_processor");
     }
 
     public static function instructionsSection()

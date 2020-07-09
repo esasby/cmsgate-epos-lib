@@ -1,6 +1,7 @@
 <?php
 
 use esas\cmsgate\epos\ConfigFieldsEpos;
+use esas\cmsgate\epos\view\admin\AdminViewFieldsEpos;
 use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
 use esas\cmsgate\view\admin\AdminViewFields;
 
@@ -23,8 +24,8 @@ return array(
     ConfigFieldsEpos::eposRetailOutletCode() => 'Код торговой точки',
     ConfigFieldsEpos::eposRetailOutletCode() . _DESC => 'Код торговой точки',
 
-    ConfigFieldsEpos::eposEsasConnector() => 'Подключение к ESAS',
-    ConfigFieldsEpos::eposEsasConnector() . _DESC => 'Поставщик услаг подлючен к ООО "Электронные Системы и Сервисы". Иначе счета будут выставляться через ООО "Универсальные Платежные Системы"',
+    ConfigFieldsEpos::eposProcessor() => 'EPOS процессинг',
+    ConfigFieldsEpos::eposProcessor() . _DESC => 'Определяет к какому процессингу EPOS выполнять подключение ',
 
     ConfigFieldsEpos::sandbox() => 'Sandbox',
     ConfigFieldsEpos::sandbox() . _DESC => 'Режим *песочницы*. Если включен, то все счета буду выставляться в тестовой системе api-dev.hgrosh.by',
@@ -98,4 +99,8 @@ style="color: #8c2003;"><span>здесь</span></a></p>',
 
     AdminViewFields::ADMIN_PAYMENT_METHOD_NAME => 'EPOS',
     AdminViewFields::ADMIN_PAYMENT_METHOD_DESCRIPTION => 'Оплата через сервис EPOS',
+
+    AdminViewFieldsEpos::EPOS_PROCESSOR_ESAS => "Электронные системы и сервисы",
+    AdminViewFieldsEpos::EPOS_PROCESSOR_UPS => "Универсальные платежные системы",
+    AdminViewFieldsEpos::EPOS_PROCESSOR_RRB => "РРБ Банк"
 );

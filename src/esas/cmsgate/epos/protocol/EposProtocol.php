@@ -3,6 +3,7 @@
 namespace esas\cmsgate\epos\protocol;
 
 use esas\cmsgate\epos\RegistryEpos;
+use esas\cmsgate\epos\view\admin\AdminViewFieldsEpos;
 use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
 use esas\cmsgate\protocol\Amount;
 use esas\cmsgate\protocol\ProtocolCurl;
@@ -19,7 +20,8 @@ use Throwable;
 class EposProtocol extends ProtocolCurl
 {
     const EPOS_URL_REAL_UPS = 'https://api.e-pos.by/public/'; // рабочий
-    const EPOS_URL_REAL_ESAS= 'https://api-epos.hgrosh.by/public/'; // рабочий
+    const EPOS_URL_REAL_ESAS = 'https://api-epos.hgrosh.by/public/'; // рабочий
+    const EPOS_URL_REAL_RRB = 'https://api.e-pos.by/rrb/public/v1/'; // рабочий
     const EPOS_URL_TEST = 'https://api-dev.hgrosh.by/epos/public/'; // тестовый
 
     /**
@@ -34,9 +36,24 @@ class EposProtocol extends ProtocolCurl
     public function __construct($authToken)
     {
         parent::__construct(
-            RegistryEpos::getRegistry()->getConfigWrapper()->isEposEsasConnector() ? self::EPOS_URL_REAL_ESAS : self::EPOS_URL_REAL_UPS,
+            $this->getRealUrl(RegistryEpos::getRegistry()->getConfigWrapper()->getEposProcessor()),
             self::EPOS_URL_TEST);
         $this->authToken = $authToken;
+    }
+
+    public function getRealUrl($eposProcessor)
+    {
+        switch ($eposProcessor) {
+            case AdminViewFieldsEpos::EPOS_PROCESSOR_ESAS:
+                return self::EPOS_URL_REAL_ESAS;
+            case AdminViewFieldsEpos::EPOS_PROCESSOR_UPS:
+                return self::EPOS_URL_REAL_UPS;
+            case AdminViewFieldsEpos::EPOS_PROCESSOR_RRB:
+                return self::EPOS_URL_REAL_RRB;
+            default:
+                $this->logger->warn("Unknown epos processor[" . $eposProcessor . "]. Using 'esas' as default");
+                return self::EPOS_URL_REAL_ESAS;
+        }
     }
 
 

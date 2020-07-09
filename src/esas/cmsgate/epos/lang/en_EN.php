@@ -1,6 +1,7 @@
 <?php
 
 use esas\cmsgate\epos\ConfigFieldsEpos;
+use esas\cmsgate\epos\view\admin\AdminViewFieldsEpos;
 use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
 use esas\cmsgate\view\admin\AdminViewFields;
 
@@ -23,8 +24,8 @@ return array(
     ConfigFieldsEpos::eposRetailOutletCode() => 'Retail outlet code',
     ConfigFieldsEpos::eposRetailOutletCode() . _DESC => 'Your retail outlet code',
 
-    ConfigFieldsEpos::eposEsasConnector() => 'ESAS connector',
-    ConfigFieldsEpos::eposEsasConnector() . _DESC => 'EPOS service connector. If *true* then all requests will be sent to esas.by, otherwise to hgrosh.by',
+    ConfigFieldsEpos::eposProcessor() => 'EPOS Processor',
+    ConfigFieldsEpos::eposProcessor() . _DESC => 'EPOS service processor',
 
     ConfigFieldsEpos::sandbox() => 'Sandbox',
     ConfigFieldsEpos::sandbox() . _DESC => 'Sandbox mode. If *true* then all requests will be sent to trial host api-dev.hgrosh.by',
@@ -96,4 +97,8 @@ return array(
 
     AdminViewFields::ADMIN_PAYMENT_METHOD_NAME => 'EPOS',
     AdminViewFields::ADMIN_PAYMENT_METHOD_DESCRIPTION => 'Payment via EPOS service',
+
+    AdminViewFieldsEpos::EPOS_PROCESSOR_ESAS => "Esas",
+    AdminViewFieldsEpos::EPOS_PROCESSOR_UPS => "UPS",
+    AdminViewFieldsEpos::EPOS_PROCESSOR_RRB => "RRB Bank"
 );
