@@ -21,7 +21,7 @@ class EposProtocol extends ProtocolCurl
 {
     const EPOS_URL_REAL_UPS = 'https://api.e-pos.by/public/'; // рабочий
     const EPOS_URL_REAL_ESAS = 'https://api-epos.hgrosh.by/public/'; // рабочий
-    const EPOS_URL_REAL_RRB = 'https://api.e-pos.by/rrb/public/v1/'; // рабочий
+    const EPOS_URL_REAL_RRB = 'https://api.e-pos.by/rrb/public/'; // рабочий
     const EPOS_URL_TEST = 'https://api-dev.hgrosh.by/epos/public/'; // тестовый
 
     /**
