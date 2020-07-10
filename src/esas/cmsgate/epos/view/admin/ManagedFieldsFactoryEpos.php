@@ -35,6 +35,11 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
                 ->setValidator(new ValidatorNotEmpty())
                 ->setRequired(false));
         $this->registerField(
+            (new ConfigFieldList(ConfigFieldsEpos::eposProcessor()))
+                ->addOption(AdminViewFieldsEpos::EPOS_PROCESSOR_ESAS)
+                ->addOption(AdminViewFieldsEpos::EPOS_PROCESSOR_UPS)
+                ->addOption(AdminViewFieldsEpos::EPOS_PROCESSOR_RRB));
+        $this->registerField(
             (new ConfigFieldText(ConfigFieldsEpos::iiiClientId()))
                 ->setValidator(new ValidatorNotEmpty())
                 ->setRequired(true));
@@ -54,11 +59,6 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
             (new ConfigFieldNumber(ConfigFieldsEpos::eposRetailOutletCode()))
                 ->setValidator(new ValidatorNumeric())
                 ->setRequired(true));
-        $this->registerField(
-            (new ConfigFieldList(ConfigFieldsEpos::eposProcessor()))
-                ->addOption(AdminViewFieldsEpos::EPOS_PROCESSOR_ESAS)
-                ->addOption(AdminViewFieldsEpos::EPOS_PROCESSOR_UPS)
-                ->addOption(AdminViewFieldsEpos::EPOS_PROCESSOR_RRB));
         $this->registerField(
             (new ConfigFieldCheckbox(ConfigFieldsEpos::debugMode())));
         $this->registerField(
