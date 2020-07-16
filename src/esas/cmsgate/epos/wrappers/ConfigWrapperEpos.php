@@ -214,4 +214,11 @@ class ConfigWrapperEpos extends ConfigWrapper
         }
     }
 
+    protected function needDefaults()
+    {
+        // предполагаем, что если в хранилище есть clientId, это не первая инциализация и значения по умолчанию не нужны
+        $paymentMethodName = $this->configStorageCms->getConfig(ConfigFieldsEpos::iiiClientId());
+        return empty($paymentMethodName);
+    }
+
 }
