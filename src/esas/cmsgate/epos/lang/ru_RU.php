@@ -75,8 +75,8 @@ return array(
     ConfigFieldsEpos::dueInterval() => 'Срок действия счета (дней)',
     ConfigFieldsEpos::dueInterval() . _DESC => 'Как долго счет, будет доступен в EPOS для оплаты',
 
-    ClientViewFieldsEpos::INSTRUCTIONS_TAB_LABEL => 'Инструкция по оплате счета в EPOS',
-    ClientViewFieldsEpos::INSTRUCTIONS => '<p>Для оплаты счета в EPOS необходимо:</p>
+    ClientViewFieldsEpos::INSTRUCTIONS_TAB_LABEL => 'Инструкция по оплате счета в ЕРИП',
+    ClientViewFieldsEpos::INSTRUCTIONS => '<p>Для оплаты счета в сервисе EPOS необходимо:</p>
 <ol>
     <li>Выбрать дерево платежей ЕРИП</li>
     <li>Выбрать услугу: <strong>Сервис EPOS</strong></li>
