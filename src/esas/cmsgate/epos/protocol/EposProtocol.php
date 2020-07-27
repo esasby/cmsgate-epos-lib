@@ -299,7 +299,7 @@ class EposProtocol extends ProtocolCurl
     public static function readCallback()
     {
         $callbackRq = $_SESSION["epos_callback_rq"];
-        if ($callbackRq == null) {
+        if ($callbackRq == null || !($callbackRq instanceof EposCallbackRq)) {
             $callbackData = json_decode(file_get_contents('php://input'), true);
             $callbackRq = new EposCallbackRq($callbackData["id"], $callbackData["claimId"]);
             $_SESSION["epos_callback_rq"] = $callbackRq; //сохраняем в сессии, т.к. file_get_contents('php://input') не всегда корректно читается несколько раз
