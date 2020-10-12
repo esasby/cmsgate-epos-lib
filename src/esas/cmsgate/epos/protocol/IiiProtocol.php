@@ -76,7 +76,6 @@ class IiiProtocol extends ProtocolCurl
         try {
             $this->defaultCurlInit($url);
             curl_setopt($this->ch, CURLOPT_HEADER, false); // включение заголовков в выводе
-            curl_setopt($this->ch, CURLOPT_VERBOSE, true); // вывод доп. информации в STDERR
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYPEER, false); // не проверять сертификат узла сети
             curl_setopt($this->ch, CURLOPT_SSL_VERIFYHOST, false); // проверка существования общего имени в сертификате SSL
             switch ($rqMethod) {
@@ -84,14 +83,16 @@ class IiiProtocol extends ProtocolCurl
                     break;
                 case RqMethod::_POST:
                     curl_setopt($this->ch, CURLOPT_POST, true);
-                    curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
+                    curl_setopt($this->ch, CURLOPT_POSTFIELDS, http_build_query($data));
                     break;
                 case RqMethod::_DELETE:
                     curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, 'DELETE');
                     break;
             }
-            if (isset($headers) && is_array($headers))
-                curl_setopt($this->ch, CURLOPT_HTTPHEADER, $headers); // Массив устанавливаемых HTTP-заголовков
+            curl_setopt($this->ch, CURLOPT_HTTPHEADER, array(
+                "Content-Type: application/x-www-form-urlencoded"
+            ));
+
             $logStr = $data;
             if (is_array($logStr))
                 $logStr = json_encode($logStr);
