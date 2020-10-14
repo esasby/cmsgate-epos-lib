@@ -81,6 +81,7 @@ class EposProtocol extends ProtocolCurl
             $postData['billingInfo']['phone']['fullNumber'] = $invoiceAddRq->getMobilePhone();
             $postData['billingInfo']['email'] = $invoiceAddRq->getEmail();
             $postData['billingInfo']['address']['fullAddress'] = $invoiceAddRq->getFullAddress();
+            $postData['paymentRules']['isTariff'] = false;
             // Список товаров/услуг
             if (empty($invoiceAddRq->getProducts())) {
                 throw new Exception('No products in order');
