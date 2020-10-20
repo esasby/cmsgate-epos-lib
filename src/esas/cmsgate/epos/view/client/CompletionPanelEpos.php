@@ -53,6 +53,13 @@ class CompletionPanelEpos
     private $qrCode;
 
     /**
+     * Флаг, когда только один таб
+     * и не нужна возможность выбора (например при renderWebpayOnly)
+     * @var bool
+     */
+    private $onlyOneTab = false;
+
+    /**
      * ViewData constructor.
      * @param OrderWrapper $orderWrapper
      */
@@ -66,6 +73,7 @@ class CompletionPanelEpos
 
     public function render()
     {
+        $this->onlyOneTab = false;
         $completionPanel = element::content(
             element::div(
                 attribute::id("completion-text"),
@@ -83,12 +91,12 @@ class CompletionPanelEpos
 
     public function renderWebpayOnly()
     {
+        $this->onlyOneTab = true;
         $completionPanel =
             $this->elementTab(
                 self::TAB_KEY_WEBPAY,
                 $this->getWebpayTabLabel(),
-                $this->elementWebpayTabContent($this->getWebpayStatus(), $this->getWebpayForm()),
-                false
+                $this->elementWebpayTabContent($this->getWebpayStatus(), $this->getWebpayForm())
             );
         echo $completionPanel;
     }
@@ -275,13 +283,13 @@ class CompletionPanelEpos
         return $this->translator->translate(ClientViewFieldsEpos::WEBPAY_MSG_UNAVAILABLE);
     }
 
-    public function elementTab($key, $header, $body, $selectable = true)
+    public function elementTab($key, $header, $body)
     {
         return
             element::div(
                 attribute::id("tab-" . $key),
                 attribute::clazz("tab " . $this->getCssClass4Tab()),
-                $this->elementTabHeaderInput($key, $selectable),
+                $this->elementTabHeaderInput($key),
                 $this->elementTabHeader($key, $header),
                 $this->elementTabBody($key, $body)
             )->__toString();
@@ -300,10 +308,10 @@ class CompletionPanelEpos
             );
     }
 
-    public function elementTabHeaderInput($key, $selectable)
+    public function elementTabHeaderInput($key)
     {
         return
-            ($selectable ? element::input(
+            (!$this->isOnlyOneTabEnabled() ? element::input(
                 attribute::id("input-" . $key),
                 attribute::type("radio"),
                 attribute::name("tabs2"),
@@ -339,8 +347,13 @@ class CompletionPanelEpos
         }
     }
 
+    /**
+     * @return bool
+     */
     public function isOnlyOneTabEnabled()
     {
+        if ($this->onlyOneTab)
+            return true;
         $enabledTabsCount = 0;
         if ($this->configWrapper->isInstructionsSectionEnabled())
             $enabledTabsCount++;
