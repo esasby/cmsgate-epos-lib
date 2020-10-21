@@ -34,7 +34,7 @@ class QRUtils
 //            self::tlv(62, self::tlv(1, $orderWrapper->getOrderNumber()));
         $qrCodeString =
             $address . "#" .
-            $qrData;
+            rawurlencode($qrData); // rawurlencode вместо urlencode для корректной кодировки пробелов
 //            strtoupper(self::tlv(63, substr(str_replace("-", "", hash('sha256', $qrData)), -4)));
         $barcode = new Barcode();
         $bobj = $barcode->getBarcodeObj(
