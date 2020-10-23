@@ -94,6 +94,14 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
             (new ConfigFieldRichtext(ConfigFieldsEpos::paymentMethodDetails()))
                 ->setRequired(true)
                 ->setValidator(new ValidatorNotEmpty()));
+        $this->registerField(
+            (new ConfigFieldText(ConfigFieldsEpos::paymentMethodNameWebpay()))
+                ->setRequired(true)
+                ->setValidator(new ValidatorNotEmpty()));
+        $this->registerField(
+            (new ConfigFieldRichtext(ConfigFieldsEpos::paymentMethodDetailsWebpay()))
+                ->setRequired(true)
+                ->setValidator(new ValidatorNotEmpty()));
 
     }
 

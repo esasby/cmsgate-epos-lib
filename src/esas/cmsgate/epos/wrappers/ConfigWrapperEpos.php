@@ -139,6 +139,24 @@ class ConfigWrapperEpos extends ConfigWrapper
         return $this->getConfig(ConfigFieldsEpos::dueInterval());
     }
 
+    /**
+     * Название системы для прямой оплаты через Webpay
+     * @return string
+     */
+    public function getPaymentMethodNameWebpay()
+    {
+        return $this->getConfig(ConfigFieldsEpos::paymentMethodNameWebpay());
+    }
+
+    /**
+     * Описание системы для прямой оплаты через Webpay
+     * @return string
+     */
+    public function getPaymentMethodDetailsWebpay()
+    {
+        return $this->getConfig(ConfigFieldsEpos::paymentMethodDetailsWebpay());
+    }
+
 
     /**
      * Метод для получения значения праметра по ключу
@@ -175,6 +193,10 @@ class ConfigWrapperEpos extends ConfigWrapper
                 return $this->getCompletionCssFile();
             case ConfigFieldsEpos::dueInterval():
                 return $this->getDueInterval();
+            case ConfigFieldsEpos::paymentMethodNameWebpay():
+                return $this->getPaymentMethodNameWebpay();
+            case ConfigFieldsEpos::paymentMethodDetailsWebpay():
+                return $this->getPaymentMethodDetailsWebpay();
             default:
                 return parent::get($config_key);
         }
@@ -199,16 +221,13 @@ class ConfigWrapperEpos extends ConfigWrapper
     public function getDefaultConfig($key)
     {
         switch ($key) {
+            case ConfigFieldsEpos::instructionsSection():
+            case ConfigFieldsEpos::qrcodeSection():
+            case ConfigFieldsEpos::webpaySection():
             case ConfigFieldsEpos::sandbox():
                 return true;
             case ConfigFieldsEpos::dueInterval():
                 return 2;
-            case ConfigFieldsEpos::instructionsSection():
-                return true;
-            case ConfigFieldsEpos::qrcodeSection():
-                return true;
-            case ConfigFieldsEpos::webpaySection():
-                return true;
             default:
                 return Registry::getRegistry()->getTranslator()->getConfigFieldDefault($key);
         }

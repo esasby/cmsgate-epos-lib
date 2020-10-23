@@ -57,6 +57,14 @@ return array(
     ConfigFieldsEpos::paymentMethodDetails() . _DEFAULT => 'EPOS™ — payment service for invoicing in AIS *Raschet* (ERIP). After invoicing you will be available for payment by a plastic card and electronic money, at any of the bank branches, cash desks, ATMs, payment terminals, in the electronic money system, through Internet banking, M-banking, Internet acquiring. ' .
 'Also EPOS service gives possibility to pay bills by QR-codes',
 
+    ConfigFieldsEpos::paymentMethodNameWebpay() => 'Payment method name (webpay)',
+    ConfigFieldsEpos::paymentMethodNameWebpay() . _DESC => 'Name displayed to the customer when choosing a payment method',
+    ConfigFieldsEpos::paymentMethodNameWebpay() . _DEFAULT => 'By card',
+
+    ConfigFieldsEpos::paymentMethodDetailsWebpay() => 'Payment method details (webpay)',
+    ConfigFieldsEpos::paymentMethodDetailsWebpay() . _DESC => 'Description of the payment method that will be shown to the client at the time of payment',
+    ConfigFieldsEpos::paymentMethodDetailsWebpay() . _DEFAULT => 'Payment by card (VISA, Maestro, Belcard) view Webpay',
+
     ConfigFieldsEpos::billStatusPending() => 'Bill status pending',
     ConfigFieldsEpos::billStatusPending() . _DESC => 'Mapped status for pending bills',
 

@@ -44,5 +44,5 @@ abstract class RegistryEpos extends Registry
         return "epos";
     }
 
-    abstract function getUrlWebpay($orderId);
+    abstract function getUrlWebpay($orderWrapper);
 }

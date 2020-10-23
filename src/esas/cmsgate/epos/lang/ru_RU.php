@@ -60,6 +60,14 @@ return array(
         'После выставления счета Вам будет доступна его оплата пластиковой карточкой и электронными деньгами, в любом из отделений банков, кассах, банкоматах, платежных терминалах, в системе электронных денег, через Интернет-банкинг, М-банкинг, интернет-эквайринг. ' .
         'Также сервис предоставляет способ удобной оплаты счетов через QR-коды',
 
+    ConfigFieldsEpos::paymentMethodNameWebpay() => 'Название способы оплаты webpay',
+    ConfigFieldsEpos::paymentMethodNameWebpay() . _DESC => 'Название, отображаемое клиенту, при выборе способа оплаты',
+    ConfigFieldsEpos::paymentMethodNameWebpay() . _DEFAULT => 'Оплата картой',
+
+    ConfigFieldsEpos::paymentMethodDetailsWebpay() => 'Описание способа оплаты webpay',
+    ConfigFieldsEpos::paymentMethodDetailsWebpay() . _DESC => 'Описание, отображаемое клиенту, при выборе способа оплаты',
+    ConfigFieldsEpos::paymentMethodDetailsWebpay() . _DEFAULT => 'Оплата заказа картой VISA/MasterCard/Белкарт через сервис WebPay',
+
     ConfigFieldsEpos::billStatusPending() => 'Статус при выставлении счета',
     ConfigFieldsEpos::billStatusPending() . _DESC => 'Какой статус выставить заказу при успешном выставлении счета в ЕРИП (идентификатор существующего статуса)',
 
