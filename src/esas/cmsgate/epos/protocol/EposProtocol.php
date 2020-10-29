@@ -64,7 +64,7 @@ class EposProtocol extends ProtocolCurl
      * @return EposInvoiceAddRs
      * @throws Exception
      */
-    public function addInvoice(EposInvoiceAddRq $invoiceAddRq)
+    public function invoiceAdd(EposInvoiceAddRq $invoiceAddRq)
     {
         $resp = new EposInvoiceAddRs();
         $loggerMainString = "Order[" . $invoiceAddRq->getOrderNumber() . "]: ";
@@ -77,25 +77,9 @@ class EposProtocol extends ProtocolCurl
             $postData['currency'] = $invoiceAddRq->getAmount()->getCurrencyNumcode();
             $postData['dateInAirUTC'] = gmdate("Y-m-d\TH:i:s.u");
             $postData['paymentDueTerms']['termsDay'] = $invoiceAddRq->getDueInterval();
-            $postData['billingInfo']['contact']['fullName'] = $invoiceAddRq->getFullName();
-            $postData['billingInfo']['phone']['fullNumber'] = $invoiceAddRq->getMobilePhone();
-            $postData['billingInfo']['email'] = $invoiceAddRq->getEmail();
-            $postData['billingInfo']['address']['fullAddress'] = $invoiceAddRq->getFullAddress();
             $postData['paymentRules']['isTariff'] = false;
-            // Список товаров/услуг
-            if (empty($invoiceAddRq->getProducts())) {
-                throw new Exception('No products in order');
-            }
-            $items = array();
-            foreach ($invoiceAddRq->getProducts() as $pr) {
-                $item['code'] = $pr->getInvId();
-                $item['name'] = htmlentities($pr->getName(), ENT_XML1);
-                $item['measure'] = 'pcs';
-                $item['quantity'] = $pr->getCount();
-                $item['unitPrice']['value'] = $pr->getUnitPrice();
-                $items[] = $item;
-            }
-            $postData['items'] = $items;
+
+            self::fillCustomerAndProductsData($postData, $invoiceAddRq);
             // запрос
             $resArray = $this->requestPost('v1/invoicing/invoice?canPayAtOnce=true', json_encode($postData), RsType::_ARRAY);
             if ($resArray == null || !is_array($resArray)) {
@@ -115,6 +99,118 @@ class EposProtocol extends ProtocolCurl
             $resp->setResponseMessage($e->getMessage());
         } catch (Exception $e) { // для совместимости с php 5
             $this->logger->error($loggerMainString . "addInvoice exception", $e);
+            $resp->setResponseCode($e->getCode());
+            $resp->setResponseMessage($e->getMessage());
+        }
+        return $resp;
+    }
+
+    private static function fillCustomerAndProductsData(&$postData, EposInvoiceAddRq $invoiceAddRq) {
+        $postData['billingInfo']['contact']['fullName'] = $invoiceAddRq->getFullName();
+        $postData['billingInfo']['phone']['fullNumber'] = $invoiceAddRq->getMobilePhone();
+        $postData['billingInfo']['email'] = $invoiceAddRq->getEmail();
+        $postData['billingInfo']['address']['fullAddress'] = $invoiceAddRq->getFullAddress();
+        // Список товаров/услуг
+        if (empty($invoiceAddRq->getProducts())) {
+            throw new Exception('No products in order');
+        }
+        $items = array();
+        foreach ($invoiceAddRq->getProducts() as $pr) {
+            $item['code'] = $pr->getInvId();
+            $item['name'] = htmlentities($pr->getName(), ENT_XML1);
+            $item['measure'] = 'pcs';
+            $item['quantity'] = $pr->getCount();
+            $item['unitPrice']['value'] = $pr->getUnitPrice();
+            $items[] = $item;
+        }
+        $postData['items'] = $items;
+    }
+
+    public function invoiceUpdate(EposInvoiceUpdateRq $invoiceUpdateRq)
+    {
+        $resp = new EposInvoiceAddRs();
+        $loggerMainString = "Order[" . $invoiceUpdateRq->getOrderNumber() . "]: ";
+        try {// формируем xml
+            $this->logger->debug($loggerMainString . "addInvoice started");
+            //получаем полную информацию по счету
+            $invoiceArray = $this->requestGet('v1/invoicing/invoice/' . $invoiceUpdateRq->getInvoiceId(), '', RsType::_ARRAY);
+            if (empty($invoiceArray)) {
+                throw new Exception("Wrong message format", EposRs::ERROR_RESP_FORMAT);
+            } elseif (array_key_exists('code', $invoiceArray) && $invoiceArray['code'] != '0') {
+                throw new Exception($invoiceArray['message'], $invoiceArray['code']);
+            }
+
+            self::fillCustomerAndProductsData($invoiceArray, $invoiceUpdateRq);
+
+            //обновляем
+            $resArray = $this->requestPut('v1/invoicing/invoice/' . $invoiceUpdateRq->getInvoiceId(), json_encode($invoiceArray), RsType::_ARRAY);
+            if ($resArray == null || !is_array($resArray)) {
+                throw new Exception("Wrong response!", EposRs::ERROR_RESP_FORMAT);
+            }
+            $resArray = $resArray[0]; //epos возвращает даже один счет массивом
+            if (array_key_exists('id', $resArray)) {
+                $resp->setInvoiceId($resArray['id']);
+            } else {
+                $resp->setResponseCode(array_key_exists('code', $resArray) ? $resArray['code'] : ProtocolError::ERROR_WRONG_MSG_FORMAT);
+                $resp->setResponseMessage(array_key_exists('message', $resArray) ? $resArray['message'] : "");
+            }
+            $this->logger->debug($loggerMainString . "addInvoice ended");
+        } catch (Throwable $e) {
+            $this->logger->error($loggerMainString . "addInvoice exception", $e);
+            $resp->setResponseCode($e->getCode());
+            $resp->setResponseMessage($e->getMessage());
+        } catch (Exception $e) { // для совместимости с php 5
+            $this->logger->error($loggerMainString . "addInvoice exception", $e);
+            $resp->setResponseCode($e->getCode());
+            $resp->setResponseMessage($e->getMessage());
+        }
+        return $resp;
+    }
+
+    public function invoicePaymentDeny(EposInvoicePaymentDenyRq $invoicePaymentDenyRq)
+    {
+        $resp = new EposInvoicePaymentDenyRs();
+        $loggerMainString = "Invoice[" . $invoicePaymentDenyRq->getInvoiceId() . "]: ";
+        try {// запрос
+            $this->logger->debug($loggerMainString . "invoicePaymentDeny started");
+            $resArray = $this->requestPost('v1/invoicing/invoice/' . $invoicePaymentDenyRq->getInvoiceId() . "/cancel", '', RsType::_ARRAY);
+            if (empty($resArray)) {
+                throw new Exception("Wrong message format", EposRs::ERROR_RESP_FORMAT);
+            } elseif (array_key_exists('code', $resArray) && $resArray['code'] != '0') {
+                throw new Exception($resArray['message'], $resArray['code']);
+            }
+            $this->logger->debug($loggerMainString . "invoicePaymentDeny ended");
+        } catch (Throwable $e) {
+            $this->logger->error($loggerMainString . "invoicePaymentDeny exception.", $e);
+            $resp->setResponseCode($e->getCode());
+            $resp->setResponseMessage($e->getMessage());
+        } catch (Exception $e) { // для совместимости с php 5
+            $this->logger->error($loggerMainString . "invoicePaymentDeny exception.", $e);
+            $resp->setResponseCode($e->getCode());
+            $resp->setResponseMessage($e->getMessage());
+        }
+        return $resp;
+    }
+
+    public function invoicePaymentAllow(EposInvoicePaymentAllowRq $invoicePaymentAllowRq)
+    {
+        $resp = new EposInvoicePaymentDenyRs();
+        $loggerMainString = "Invoice[" . $invoicePaymentAllowRq->getInvoiceId() . "]: ";
+        try {// запрос
+            $this->logger->debug($loggerMainString . "invoicePaymentAllow started");
+            $resArray = $this->requestPost('v1/invoicing/invoice/' . $invoicePaymentAllowRq->getInvoiceId() . "/send", '', RsType::_ARRAY);
+            if (empty($resArray)) {
+                throw new Exception("Wrong message format", EposRs::ERROR_RESP_FORMAT);
+            } elseif (array_key_exists('code', $resArray) && $resArray['code'] != '0') {
+                throw new Exception($resArray['message'], $resArray['code']);
+            }
+            $this->logger->debug($loggerMainString . "invoicePaymentAllow ended");
+        } catch (Throwable $e) {
+            $this->logger->error($loggerMainString . "invoicePaymentAllow exception.", $e);
+            $resp->setResponseCode($e->getCode());
+            $resp->setResponseMessage($e->getMessage());
+        } catch (Exception $e) { // для совместимости с php 5
+            $this->logger->error($loggerMainString . "invoicePaymentAllow exception.", $e);
             $resp->setResponseCode($e->getCode());
             $resp->setResponseMessage($e->getMessage());
         }
@@ -206,9 +302,10 @@ class EposProtocol extends ProtocolCurl
      *
      * @param EposInvoiceGetRq $invoiceGetRq
      *
-     * @return EposInvoiceGetRs
+     * @param bool $returnArray - true, для случая когда метод должен вернуть не объект EposInvoiceGetRs, а массив, например при редактировании счета и отправки в PUT
+     * @return EposInvoiceGetRs|array
      */
-    public function getInvoice(EposInvoiceGetRq $invoiceGetRq)
+    public function invoiceGet(EposInvoiceGetRq $invoiceGetRq, $returnArray = false)
     {
         $resp = new EposInvoiceGetRs();
         $loggerMainString = "Invoice[" . $invoiceGetRq->getInvoiceId() . "]: ";
@@ -242,7 +339,10 @@ class EposProtocol extends ProtocolCurl
             $resp->setResponseCode($e->getCode());
             $resp->setResponseMessage($e->getMessage());
         }
-        return $resp;
+        if ($returnArray)
+            return $resArray;
+        else
+            return $resp;
     }
 
     /**

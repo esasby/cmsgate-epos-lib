@@ -42,7 +42,7 @@ class ControllerEposCallback extends ControllerEpos
             if (empty($callbackRq->getInvoiceId()))
                 throw new Exception('Wrong invoiceId[' . $callbackRq->getInvoiceId() . "]");
             $this->logger->info($loggerMainString . "Loading order data from EPOS service...");
-            $this->eposInvoiceGetRs = EposProtocolFactory::getProtocol()->getInvoice(new EposInvoiceGetRq($callbackRq->getInvoiceId()));
+            $this->eposInvoiceGetRs = EposProtocolFactory::getProtocol()->invoiceGet(new EposInvoiceGetRq($callbackRq->getInvoiceId()));
             if ($this->eposInvoiceGetRs->hasError())
                 throw new Exception($this->eposInvoiceGetRs->getResponseMessage(), $this->eposInvoiceGetRs->getResponseCode());
             $this->logger->info($loggerMainString . 'Loading local order object for id[' . $this->eposInvoiceGetRs->getOrderNumber() . "]");
