@@ -9,12 +9,10 @@
 namespace esas\cmsgate\epos\controllers;
 
 use esas\cmsgate\epos\protocol\EposProtocolFactory;
-use esas\cmsgate\epos\protocol\IiiProtocol;
 use esas\cmsgate\protocol\Amount;
 use esas\cmsgate\epos\protocol\EposInvoiceAddRq;
 use esas\cmsgate\epos\protocol\EposInvoiceAddRs;
 use esas\cmsgate\epos\protocol\OrderProduct;
-use esas\cmsgate\epos\protocol\EposProtocol;
 use esas\cmsgate\wrappers\OrderWrapper;
 use Exception;
 use Throwable;
@@ -38,7 +36,8 @@ class ControllerEposAddInvoice extends ControllerEpos
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
             $invoiceAddRq = new EposInvoiceAddRq();
-            $invoiceAddRq->setOrderNumber($orderWrapper->getOrderNumber() . '-' . (time() - strtotime("today")));
+//            $invoiceAddRq->setOrderNumber($orderWrapper->getOrderNumber() . '-' . (time() - strtotime("today")));
+            $invoiceAddRq->setOrderNumber($orderWrapper->getOrderNumber());
             $invoiceAddRq->setFullName($orderWrapper->getFullName());
             $invoiceAddRq->setMobilePhone($orderWrapper->getMobilePhone());
             $invoiceAddRq->setEmail($orderWrapper->getEmail());
