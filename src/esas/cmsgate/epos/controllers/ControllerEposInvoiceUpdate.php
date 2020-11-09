@@ -55,15 +55,9 @@ class ControllerEposInvoiceUpdate extends ControllerEpos
             $invoiceUpdateRq->setEmail($orderWrapper->getEmail());
             $invoiceUpdateRq->setFullAddress($orderWrapper->getAddress());
             $invoiceUpdateRq->setAmount(new Amount($orderWrapper->getAmount(), $orderWrapper->getCurrency()));
-            foreach ($orderWrapper->getProducts() as $cartProduct) {
-                $product = new OrderProduct();
-                $product->setName($cartProduct->getName());
-                $product->setInvId($cartProduct->getInvId());
-                $product->setCount($cartProduct->getCount());
-                $product->setUnitPrice($cartProduct->getUnitPrice());
-                $invoiceUpdateRq->addProduct($product);
-                unset($product); //??
-            }
+            $invoiceUpdateRq->setShippingAmount(new Amount($orderWrapper->getShippingAmount(), $orderWrapper->getCurrency()));
+            if (ControllerEposInvoiceAdd::setOrderProducts($orderWrapper, $invoiceUpdateRq))
+                $this->logger->warn($loggerMainString . "Total amount mismatch. Extra tax was added"); //что-то так с суммой
             $resp = EposProtocolFactory::getProtocol()->invoiceUpdate($invoiceUpdateRq);
             if ($resp->hasError()) {
                 $this->logger->error($loggerMainString . "Invoice can not be updated.");

@@ -105,11 +105,20 @@ class EposProtocol extends ProtocolCurl
         return $resp;
     }
 
+    /**
+     * Сюда вынесено заполнение полей, которые могут быть изменены в заказе
+     * @param $postData
+     * @param EposInvoiceAddRq $invoiceAddRq
+     * @throws Exception
+     */
     private static function fillCustomerAndProductsData(&$postData, EposInvoiceAddRq $invoiceAddRq) {
         $postData['billingInfo']['contact']['fullName'] = $invoiceAddRq->getFullName();
         $postData['billingInfo']['phone']['fullNumber'] = $invoiceAddRq->getMobilePhone();
         $postData['billingInfo']['email'] = $invoiceAddRq->getEmail();
         $postData['billingInfo']['address']['fullAddress'] = $invoiceAddRq->getFullAddress();
+        if ($invoiceAddRq->getShippingAmount() != null && $invoiceAddRq->getShippingAmount()->getValue() >= 0) { // проверка =0 важно для случая, когда в заказе удалена доставка
+            $postData['shippingInfo']['amount']['value'] = $invoiceAddRq->getShippingAmount()->getValue();
+        }
         // Список товаров/услуг
         if (empty($invoiceAddRq->getProducts())) {
             throw new Exception('No products in order');

@@ -43,16 +43,10 @@ class ControllerEposInvoiceAdd extends ControllerEpos
             $invoiceAddRq->setEmail($orderWrapper->getEmail());
             $invoiceAddRq->setFullAddress($orderWrapper->getAddress());
             $invoiceAddRq->setAmount(new Amount($orderWrapper->getAmount(), $orderWrapper->getCurrency()));
+            $invoiceAddRq->setShippingAmount(new Amount($orderWrapper->getShippingAmount(), $orderWrapper->getCurrency()));
             $invoiceAddRq->setDueInterval($this->configWrapper->getDueInterval());
-            foreach ($orderWrapper->getProducts() as $cartProduct) {
-                $product = new OrderProduct();
-                $product->setName($cartProduct->getName());
-                $product->setInvId($cartProduct->getInvId());
-                $product->setCount($cartProduct->getCount());
-                $product->setUnitPrice($cartProduct->getUnitPrice());
-                $invoiceAddRq->addProduct($product);
-                unset($product); //??
-            }
+            if (self::setOrderProducts($orderWrapper, $invoiceAddRq))
+                $this->logger->warn($loggerMainString . "Total amount mismatch. Extra tax was added"); //что-то так с суммой
             $eposProtocol = EposProtocolFactory::getProtocol();
             $resp = $eposProtocol->invoiceAdd($invoiceAddRq);
             if ($resp->hasError()) {
@@ -71,6 +65,39 @@ class ControllerEposInvoiceAdd extends ControllerEpos
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
             throw $e;
         }
+    }
+
+    /**
+     * @param OrderWrapper $orderWrapper
+     * @param EposInvoiceAddRq $invoiceAddRq
+     */
+    public static function setOrderProducts($orderWrapper, $invoiceAddRq) {
+        $productsTotal = 0;
+        foreach ($orderWrapper->getProducts() as $cartProduct) {
+            $product = new OrderProduct();
+            $product->setName($cartProduct->getName());
+            $product->setInvId($cartProduct->getInvId());
+            $product->setCount($cartProduct->getCount());
+            $product->setUnitPrice($cartProduct->getUnitPrice());
+            $invoiceAddRq->addProduct($product);
+            $productsTotal += intval($cartProduct->getCount()) * floatval($cartProduct->getUnitPrice());
+            unset($product); //??
+        }
+        /**
+         * если по какой-то причине, общая сумма заказа не совпадает с суммой продуктов в заказе + стоимость доставка
+         * то разницу добавляем как отдельный продукт "Extra Tax"
+         */
+        $extTax = floatval($orderWrapper->getAmount()) - floatval($productsTotal) - floatval($orderWrapper->getShippingAmount());
+        if ($extTax > 0) {
+            $product = new OrderProduct();
+            $product->setName("Extra tax");
+            $product->setInvId("TAX");
+            $product->setCount(1);
+            $product->setUnitPrice($extTax);
+            $invoiceAddRq->addProduct($product);
+            return true; // для возможности логироания
+        }
+        return false;
     }
 
     /**

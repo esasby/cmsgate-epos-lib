@@ -22,6 +22,10 @@ class EposInvoiceAddRq extends EposRq
      * @var Amount
      */
     private $amount;
+    /**
+     * @var Amount
+     */
+    private $shippingAmount;
     private $products;
     private $dueInterval;
 
@@ -122,6 +126,24 @@ class EposInvoiceAddRq extends EposRq
         if ($amount == null || $amount->getValue() <= 0)
             $this->logger->warn('Incorrect bill amount[' . $amount->getValue() . "]");
         $this->amount = $amount;
+    }
+
+    /**
+     * @return Amount
+     */
+    public function getShippingAmount()
+    {
+        return $this->shippingAmount;
+    }
+
+    /**
+     * @param Amount $shippingAmount
+     */
+    public function setShippingAmount($shippingAmount)
+    {
+        if ($shippingAmount == null || $shippingAmount->getValue() <= 0)
+            $this->logger->warn('Incorrect shipping  amount[' . $shippingAmount->getValue() . "]");
+        $this->shippingAmount = $shippingAmount;
     }
 
     /**
