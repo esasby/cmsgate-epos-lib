@@ -138,6 +138,8 @@ class EposProtocol extends ProtocolCurl
                 throw new Exception("Wrong message format", EposRs::ERROR_RESP_FORMAT);
             } elseif (array_key_exists('code', $invoiceArray) && $invoiceArray['code'] != '0') {
                 throw new Exception($invoiceArray['message'], $invoiceArray['code']);
+            } elseif (!array_key_exists('id', $invoiceArray)) {
+                throw new Exception("Wrong message format", EposRs::ERROR_RESP_FORMAT);
             }
 
             self::fillCustomerAndProductsData($invoiceArray, $invoiceUpdateRq);
@@ -147,7 +149,7 @@ class EposProtocol extends ProtocolCurl
             if ($resArray == null || !is_array($resArray)) {
                 throw new Exception("Wrong response!", EposRs::ERROR_RESP_FORMAT);
             }
-            $resArray = $resArray[0]; //epos возвращает даже один счет массивом
+//            $resArray = $resArray[0]; //epos возвращает даже один счет массивом
             if (array_key_exists('id', $resArray)) {
                 $resp->setInvoiceId($resArray['id']);
             } else {
@@ -373,6 +375,10 @@ class EposProtocol extends ProtocolCurl
                     break;
                 case RqMethod::_POST:
                     curl_setopt($this->ch, CURLOPT_POST, true);
+                    curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
+                    break;
+                case RqMethod::_PUT:
+                    curl_setopt($this->ch, CURLOPT_CUSTOMREQUEST, "PUT");
                     curl_setopt($this->ch, CURLOPT_POSTFIELDS, $data);
                     break;
                 case RqMethod::_DELETE:
