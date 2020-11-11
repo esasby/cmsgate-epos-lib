@@ -46,7 +46,7 @@ class ControllerEposCallback extends ControllerEpos
             if ($this->eposInvoiceGetRs->hasError())
                 throw new Exception($this->eposInvoiceGetRs->getResponseMessage(), $this->eposInvoiceGetRs->getResponseCode());
             $this->logger->info($loggerMainString . 'Loading local order object for id[' . $this->eposInvoiceGetRs->getOrderNumber() . "]");
-            $this->localOrderWrapper = RegistryEpos::getRegistry()->getOrderWrapperByOrderNumber($this->eposInvoiceGetRs->getOrderNumber());
+            $this->localOrderWrapper = RegistryEpos::getRegistry()->getOrderWrapperByOrderNumberOrId($this->eposInvoiceGetRs->getOrderNumber());
             if (empty($this->localOrderWrapper))
                 throw new Exception('Can not load order info for id[' . $this->eposInvoiceGetRs->getOrderNumber() . "]");
             if (!$this->configWrapper->isSandbox() // на тестовой системе это пока не работает

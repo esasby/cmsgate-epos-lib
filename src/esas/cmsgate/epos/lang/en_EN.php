@@ -42,7 +42,7 @@ return array(
     ConfigFieldsEpos::completionText() => 'Completion text',
     ConfigFieldsEpos::completionText() . _DESC => 'Text displayed to the client after the successful invoice. Can contain html. ' .
         'In the text you can refer to variables @order_id, @order_number, @order_total, @order_currency, @order_fullname, @order_phone, @order_address',
-    ConfigFieldsEpos::completionText() . _DEFAULT => '<p>Bill #<strong>@order_number</strong> was successfully placed in ERIP</p>
+    ConfigFieldsEpos::completionText() . _DEFAULT => '<p>Bill #<strong>@order_number_or_id</strong> was successfully placed in ERIP</p>
 <p>You can pay it in cash, a plastic card and electronic money, in any bank, cash departments, ATMs, payment terminals, in the system of electronic money, through Internet banking, M-banking, online acquiring</p>',
 
     ConfigFieldsEpos::completionCssFile() => 'Completion page CSS file',

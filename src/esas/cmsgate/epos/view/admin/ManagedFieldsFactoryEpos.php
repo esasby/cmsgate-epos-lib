@@ -64,6 +64,8 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
         $this->registerField(
             (new ConfigFieldCheckbox(ConfigFieldsEpos::sandbox())));
         $this->registerField(
+            (new ConfigFieldCheckbox(ConfigFieldsEpos::useOrderNumber())));
+        $this->registerField(
             (new ConfigFieldNumber(ConfigFieldsEpos::dueInterval()))
                 ->setMin(1)
                 ->setMax(10)

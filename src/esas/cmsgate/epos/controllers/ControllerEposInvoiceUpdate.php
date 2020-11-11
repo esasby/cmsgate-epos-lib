@@ -49,7 +49,7 @@ class ControllerEposInvoiceUpdate extends ControllerEpos
             //<<<<<<<<<<<<<<<<<<<<<<< обновляем информацию по счету
             $invoiceUpdateRq = new EposInvoiceUpdateRq();
             $invoiceUpdateRq->setInvoiceId($orderWrapper->getExtId());
-            $invoiceUpdateRq->setOrderNumber($orderWrapper->getOrderNumber());
+            $invoiceUpdateRq->setOrderNumber($orderWrapper->getOrderNumberOrId()); // учесть в колбэке
             $invoiceUpdateRq->setFullName($orderWrapper->getFullName());
             $invoiceUpdateRq->setMobilePhone($orderWrapper->getMobilePhone());
             $invoiceUpdateRq->setEmail($orderWrapper->getEmail());

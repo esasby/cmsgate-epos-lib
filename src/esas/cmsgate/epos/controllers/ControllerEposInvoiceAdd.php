@@ -36,8 +36,8 @@ class ControllerEposInvoiceAdd extends ControllerEpos
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
             $invoiceAddRq = new EposInvoiceAddRq();
-//            $invoiceAddRq->setOrderNumber($orderWrapper->getOrderNumber() . '-' . (time() - strtotime("today")));
-            $invoiceAddRq->setOrderNumber($orderWrapper->getOrderNumber());
+//            $invoiceAddRq->setOrderNumber($orderWrapper->getOrderNumber() . '-' . (time() - strtotime("today"))); // для тестов
+            $invoiceAddRq->setOrderNumber($orderWrapper->getOrderNumberOrId());
             $invoiceAddRq->setFullName($orderWrapper->getFullName());
             $invoiceAddRq->setMobilePhone($orderWrapper->getMobilePhone());
             $invoiceAddRq->setEmail($orderWrapper->getEmail());
