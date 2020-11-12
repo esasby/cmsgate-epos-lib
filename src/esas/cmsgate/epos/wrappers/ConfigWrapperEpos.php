@@ -225,6 +225,7 @@ class ConfigWrapperEpos extends ConfigWrapper
             case ConfigFieldsEpos::qrcodeSection():
             case ConfigFieldsEpos::webpaySection():
             case ConfigFieldsEpos::sandbox():
+            case ConfigFieldsEpos::useOrderNumber():
                 return true;
             case ConfigFieldsEpos::dueInterval():
                 return 2;
