@@ -9,10 +9,12 @@
 namespace esas\cmsgate\epos\controllers;
 
 use esas\cmsgate\epos\protocol\EposProtocolFactory;
+use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
 use esas\cmsgate\protocol\Amount;
 use esas\cmsgate\epos\protocol\EposInvoiceAddRq;
 use esas\cmsgate\epos\protocol\EposInvoiceAddRs;
 use esas\cmsgate\epos\protocol\OrderProduct;
+use esas\cmsgate\Registry;
 use esas\cmsgate\wrappers\OrderWrapper;
 use Exception;
 use Throwable;
@@ -96,6 +98,14 @@ class ControllerEposInvoiceAdd extends ControllerEpos
             $product->setUnitPrice($extTax);
             $invoiceAddRq->addProduct($product);
             return true; // для возможности логироания
+        } elseif ($extTax < 0) { //сумма за товары и доставку выше обшей суммы заказа. для безопасности создаем товар с суммой заказа
+            $product = new OrderProduct();
+            $product->setName(Registry::getRegistry()->getTranslator()->translate(ClientViewFieldsEpos::UNKNOWN_PRODUCT));
+            $product->setInvId("0");
+            $product->setCount(1);
+            $product->setUnitPrice($orderWrapper->getAmount());
+            $invoiceAddRq->setShippingAmount(new Amount(0, $orderWrapper->getCurrency())); //обнуляем стоиомть доставки
+            $invoiceAddRq->setProducts([$product]); //остальные продукты удаляем, т.к. EPOS считает по ним суммы
         }
         return false;
     }

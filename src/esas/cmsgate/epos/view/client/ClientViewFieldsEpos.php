@@ -27,4 +27,5 @@ class ClientViewFieldsEpos extends ClientViewFields
     const WEBPAY_MSG_SUCCESS = 'epos_webpay_msg_success';
     const WEBPAY_MSG_UNSUCCESS = 'epos_webpay_msg_unsuccess';
     const WEBPAY_MSG_UNAVAILABLE = 'epos_webpay_msg_unavailable';
+    const UNKNOWN_PRODUCT = 'epos_unknown_product';
 }

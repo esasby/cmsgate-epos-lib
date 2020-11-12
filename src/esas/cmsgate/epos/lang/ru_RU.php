@@ -105,6 +105,8 @@ style="color: #8c2003;"><span>здесь</span></a></p>',
     ClientViewFieldsEpos::WEBPAY_MSG_UNSUCCESS => 'Ошибка оплаты счета через сервис WebPay',
     ClientViewFieldsEpos::WEBPAY_MSG_UNAVAILABLE => 'Извините, операция временно недоступна',
 
+    ClientViewFieldsEpos::UNKNOWN_PRODUCT => 'Неизвестный продукт',
+
     AdminViewFields::ADMIN_PAYMENT_METHOD_NAME => 'EPOS',
     AdminViewFields::ADMIN_PAYMENT_METHOD_DESCRIPTION => 'Оплата через сервис EPOS',
 

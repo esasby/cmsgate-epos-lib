@@ -102,6 +102,7 @@ return array(
     ClientViewFieldsEpos::WEBPAY_MSG_SUCCESS => 'Webpay: payment completed!',
     ClientViewFieldsEpos::WEBPAY_MSG_UNSUCCESS => 'Webpay: payment failed!',
     ClientViewFieldsEpos::WEBPAY_MSG_UNAVAILABLE => 'Sorry, operation currently not available',
+    ClientViewFieldsEpos::UNKNOWN_PRODUCT => 'Unknown product',
 
     AdminViewFields::ADMIN_PAYMENT_METHOD_NAME => 'EPOS',
     AdminViewFields::ADMIN_PAYMENT_METHOD_DESCRIPTION => 'Payment via EPOS service',
