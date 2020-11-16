@@ -287,7 +287,7 @@ class EposProtocol extends ProtocolCurl
                 throw new Exception("Wrong response!", EposRs::ERROR_RESP_FORMAT);
             }
             if (array_key_exists('result', $resArray)) {
-                $resp->setAddress($resArray['result']['address'] . "pay?param=" . $resArray['result']['num']);
+                $resp->setAddress($resArray['result']['address'] . "?param=" . $resArray['result']['num']);
                 $resp->setQrData($resArray['result']['qrData']);
                 $resp->setImage($resArray['result']['image']);
             } else {
