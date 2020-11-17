@@ -112,10 +112,10 @@ class EposProtocol extends ProtocolCurl
      * @throws Exception
      */
     private static function fillCustomerAndProductsData(&$postData, EposInvoiceAddRq $invoiceAddRq) {
-        $postData['billingInfo']['contact']['fullName'] = $invoiceAddRq->getFullName();
-        $postData['billingInfo']['phone']['fullNumber'] = $invoiceAddRq->getMobilePhone();
+        $postData['billingInfo']['contact']['firstName'] = $invoiceAddRq->getFullName();
+        $postData['billingInfo']['phone']['nationalNumber'] = filter_var($invoiceAddRq->getMobilePhone(), FILTER_SANITIZE_NUMBER_INT);
         $postData['billingInfo']['email'] = $invoiceAddRq->getEmail();
-        $postData['billingInfo']['address']['fullAddress'] = $invoiceAddRq->getFullAddress();
+        $postData['billingInfo']['address']['line1'] = $invoiceAddRq->getFullAddress();
         if ($invoiceAddRq->getShippingAmount() != null && $invoiceAddRq->getShippingAmount()->getValue() >= 0) { // проверка =0 важно для случая, когда в заказе удалена доставка
             $postData['shippingInfo']['amount']['value'] = $invoiceAddRq->getShippingAmount()->getValue();
         }
