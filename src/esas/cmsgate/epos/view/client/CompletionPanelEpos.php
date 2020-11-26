@@ -101,6 +101,21 @@ class CompletionPanelEpos
         echo $completionPanel;
     }
 
+    public function redirectWebpay()
+    {
+        $this->onlyOneTab = true;
+        $completionPanel = element::content(
+            $this->elementTab(
+                self::TAB_KEY_WEBPAY,
+                $this->getWebpayTabLabel(),
+                $this->elementWebpayTabContent($this->getWebpayStatus(), $this->getWebpayForm())
+            ),
+            element::includeFile(dirname(__FILE__) . "/webpayAutoSubmitJs.php", ["completionPanel" => $this])
+
+        );
+        echo $completionPanel;
+    }
+
     public function addTabs()
     {
         return array(
