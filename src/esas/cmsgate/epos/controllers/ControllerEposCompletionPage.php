@@ -21,10 +21,10 @@ class ControllerEposCompletionPage extends ControllerEpos
      * @return CompletionPanelEpos
      * @throws Throwable
      */
-    public function process($orderId)
+    public function process($orderWrapper)
     {
         try {
-            $orderWrapper = $this->registry->getOrderWrapper($orderId);
+            $this->checkOrderWrapper($orderWrapper);
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
             $completionPanel = $this->registry->getCompletionPanel($orderWrapper);

@@ -28,6 +28,7 @@ class ControllerEposWebpayForm extends ControllerEpos
     public function process($orderWrapper)
     {
         try {
+            $this->checkOrderWrapper($orderWrapper);
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
             $webPayRq = new EposWebPayRq();

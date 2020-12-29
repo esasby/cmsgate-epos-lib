@@ -37,4 +37,13 @@ abstract class ControllerEpos extends Controller
         $this->registry = Registry::getRegistry();
         $this->configWrapper = Registry::getRegistry()->getConfigWrapper();
     }
+
+    public function checkOrderWrapper(&$orderWrapper) {
+        if (is_numeric($orderWrapper)) //если передан orderId
+            $orderWrapper = $this->registry->getOrderWrapper($orderWrapper);
+        if (empty($orderWrapper) || empty($orderWrapper->getOrderNumber())) {
+            throw new Exception("Incorrect method call! orderWrapper is null or not well initialized");
+        }
+        return $orderWrapper;
+    }
 }

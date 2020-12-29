@@ -29,9 +29,7 @@ class ControllerEposInvoiceAdd extends ControllerEpos
     public function process($orderWrapper)
     {
         try {
-            if (empty($orderWrapper)) {
-                throw new Exception("Incorrect method call! orderWrapper is null");
-            }
+            $this->checkOrderWrapper($orderWrapper);
             if (!empty($orderWrapper->getExtId())) {
                 throw new Exception("Order is already processed");
             }
