@@ -112,7 +112,9 @@ class EposProtocol extends ProtocolCurl
      * @throws Exception
      */
     private static function fillCustomerAndProductsData(&$postData, EposInvoiceAddRq $invoiceAddRq) {
-        $postData['billingInfo']['contact']['firstName'] = $invoiceAddRq->getFullName();
+        $postData['billingInfo']['contact']['firstName'] = $invoiceAddRq->getFirstName();
+        $postData['billingInfo']['contact']['lastName'] = $invoiceAddRq->getLastName();
+        $postData['billingInfo']['contact']['middleName'] = $invoiceAddRq->getMiddleName();
         $postData['billingInfo']['phone']['nationalNumber'] = preg_replace('/[^0-9]/', '', $invoiceAddRq->getMobilePhone());
         $postData['billingInfo']['email'] = $invoiceAddRq->getEmail();
         $postData['billingInfo']['address']['line1'] = $invoiceAddRq->getFullAddress();

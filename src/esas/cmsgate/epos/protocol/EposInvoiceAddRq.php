@@ -14,8 +14,10 @@ use esas\cmsgate\protocol\Amount;
 class EposInvoiceAddRq extends EposRq
 {
     private $orderNumber;
-    private $fullName;
     private $mobilePhone;
+    private $firstName = '';
+    private $lastName = '';
+    private $middleName = '';
     private $email;
     private $fullAddress;
     /**
@@ -47,20 +49,68 @@ class EposInvoiceAddRq extends EposRq
     }
 
     /**
-     * @return string
-     */
-    public function getFullName()
-    {
-        return $this->fullName;
-    }
-
-    /**
      * @param string $fullName
      */
     public function setFullName($fullName)
     {
-        $this->fullName = trim($fullName);
+        $parts = preg_split('/\s+/', $fullName);
+        if (sizeof($parts) >= 3)
+            $this->middleName = $parts[2];
+        if (sizeof($parts) >= 2)
+            $this->firstName = $parts[1];
+        if (sizeof($parts) >= 1)
+            $this->lastName = $parts[0];
     }
+
+    /**
+     * @return mixed
+     */
+    public function getFirstName()
+    {
+        return $this->firstName;
+    }
+
+    /**
+     * @param mixed $firstName
+     */
+    public function setFirstName($firstName)
+    {
+        $this->firstName = $firstName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getLastName()
+    {
+        return $this->lastName;
+    }
+
+    /**
+     * @param mixed $lastName
+     */
+    public function setLastName($lastName)
+    {
+        $this->lastName = $lastName;
+    }
+
+    /**
+     * @return mixed
+     */
+    public function getMiddleName()
+    {
+        return $this->middleName;
+    }
+
+    /**
+     * @param mixed $middleName
+     */
+    public function setMiddleName($middleName)
+    {
+        $this->middleName = $middleName;
+    }
+
+
 
     /**
      * @return string
