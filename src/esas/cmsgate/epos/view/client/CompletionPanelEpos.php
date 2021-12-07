@@ -430,7 +430,7 @@ class CompletionPanelEpos
     {
         if ("default" == $this->configWrapper->getCompletionCssFile())
             return dirname(__FILE__) . "/completion-default.css";
-        else
+        else if (!empty($this->configWrapper->getCompletionCssFile()))
             return $_SERVER['DOCUMENT_ROOT'] . $this->configWrapper->getCompletionCssFile();
     }
 
