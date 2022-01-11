@@ -68,17 +68,17 @@ return array(
     ConfigFieldsEpos::paymentMethodDetailsWebpay() . _DESC => 'Описание, отображаемое клиенту, при выборе способа оплаты',
     ConfigFieldsEpos::paymentMethodDetailsWebpay() . _DEFAULT => 'Оплата заказа картой VISA/MasterCard/Белкарт через сервис WebPay',
 
-    ConfigFieldsEpos::billStatusPending() => 'Статус при выставлении счета',
-    ConfigFieldsEpos::billStatusPending() . _DESC => 'Какой статус выставить заказу при успешном выставлении счета в ЕРИП (идентификатор существующего статуса)',
+    ConfigFieldsEpos::orderStatusPending() => 'Статус при выставлении счета',
+    ConfigFieldsEpos::orderStatusPending() . _DESC => 'Какой статус выставить заказу при успешном выставлении счета в ЕРИП (идентификатор существующего статуса)',
 
-    ConfigFieldsEpos::billStatusPayed() => 'Статус при успешной оплате счета',
-    ConfigFieldsEpos::billStatusPayed() . _DESC => 'Какой статус выставить заказу при успешной оплате выставленного счета (идентификатор существующего статуса)',
+    ConfigFieldsEpos::orderStatusPayed() => 'Статус при успешной оплате счета',
+    ConfigFieldsEpos::orderStatusPayed() . _DESC => 'Какой статус выставить заказу при успешной оплате выставленного счета (идентификатор существующего статуса)',
 
-    ConfigFieldsEpos::billStatusFailed() => 'Статус при ошибке оплаты счета',
-    ConfigFieldsEpos::billStatusFailed() . _DESC => 'Какой статус выставить заказу при ошибке выставленния счета (идентификатор существующего статуса)',
+    ConfigFieldsEpos::orderStatusFailed() => 'Статус при ошибке оплаты счета',
+    ConfigFieldsEpos::orderStatusFailed() . _DESC => 'Какой статус выставить заказу при ошибке выставленния счета (идентификатор существующего статуса)',
 
-    ConfigFieldsEpos::billStatusCanceled() => 'Статус при отмене оплаты счета',
-    ConfigFieldsEpos::billStatusCanceled() . _DESC => 'Какой статус выставить заказу при отмене оплаты счета (идентификатор существующего статуса)',
+    ConfigFieldsEpos::orderStatusCanceled() => 'Статус при отмене оплаты счета',
+    ConfigFieldsEpos::orderStatusCanceled() . _DESC => 'Какой статус выставить заказу при отмене оплаты счета (идентификатор существующего статуса)',
 
     ConfigFieldsEpos::dueInterval() => 'Срок действия счета (дней)',
     ConfigFieldsEpos::dueInterval() . _DESC => 'Как долго счет, будет доступен в EPOS для оплаты',

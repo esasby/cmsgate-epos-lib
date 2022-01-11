@@ -29,7 +29,7 @@ class ControllerEposWebpayForm extends ControllerEpos
     {
         try {
             $this->checkOrderWrapper($orderWrapper);
-            $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "]: ";
+            $loggerMainString = "Order[" . $orderWrapper->getOrderNumberOrId() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
             $webPayRq = new EposWebPayRq();
             $webPayRq->setInvoiceId($orderWrapper->getExtId());

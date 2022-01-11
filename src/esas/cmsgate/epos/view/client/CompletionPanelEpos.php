@@ -71,7 +71,7 @@ class CompletionPanelEpos
         $this->orderWrapper = $orderWrapper;
     }
 
-    public function render()
+    public function __toString()
     {
         $this->onlyOneTab = false;
         $completionPanel = element::content(
@@ -86,7 +86,12 @@ class CompletionPanelEpos
                 $this->addTabs()),
             $this->addCss()
         );
-        echo $completionPanel;
+        return $completionPanel;
+    }
+
+    public function render()
+    {
+        echo $this->__toString();
     }
 
     public function renderWebpayOnly()

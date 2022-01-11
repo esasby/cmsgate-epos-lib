@@ -58,16 +58,16 @@ class ControllerEposCallback extends ControllerEpos
             }
             if ($this->eposInvoiceGetRs->isStatusPayed()) {
                 $this->logger->info($loggerMainString . "Remote order status[" . $this->eposInvoiceGetRs->getStatus() . "] is mapped as [Payed]");
-                $this->onStatusPayed();
+                RegistryEpos::getRegistry()->getHooks()->onCallbackStatusPayed($this->localOrderWrapper, $this->eposInvoiceGetRs);
             } elseif ($this->eposInvoiceGetRs->isStatusCanceled()) {
                 $this->logger->info($loggerMainString . "Remote order status[" . $this->eposInvoiceGetRs->getStatus() . "] is mapped as [Canceled]");
-                $this->onStatusCanceled();
+                RegistryEpos::getRegistry()->getHooks()->onCallbackStatusCanceled($this->localOrderWrapper, $this->eposInvoiceGetRs);
             } elseif ($this->eposInvoiceGetRs->isStatusPending()) {
                 $this->logger->info($loggerMainString . "Remote order status[" . $this->eposInvoiceGetRs->getStatus() . "] is mapped as [Pending]");
-                $this->onStatusPending();
+                RegistryEpos::getRegistry()->getHooks()->onCallbackStatusPending($this->localOrderWrapper, $this->eposInvoiceGetRs);
             } else {
                 $this->logger->error($loggerMainString . "Remote order status[" . $this->eposInvoiceGetRs->getStatus() . "] is mapped as [Failed]");
-                $this->onStatusFailed();
+                RegistryEpos::getRegistry()->getHooks()->onCallbackStatusFailed($this->localOrderWrapper, $this->eposInvoiceGetRs);
             }
             $this->logger->info($loggerMainString . "Controller ended");
         } catch (Throwable $e) {
@@ -77,49 +77,5 @@ class ControllerEposCallback extends ControllerEpos
         } finally {
             return $this->eposInvoiceGetRs;
         }
-    }
-
-    /**
-     * @param $status
-     * @throws Throwable
-     */
-    public function updateStatus($status)
-    {
-        if (isset($status) && $this->localOrderWrapper->getStatus() != $status) {
-            $this->logger->info("Setting status[" . $status . "] for order[" . $this->eposInvoiceGetRs->getOrderNumber() . "]...");
-            $this->localOrderWrapper->updateStatus($status);
-        }
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function onStatusPayed()
-    {
-        $this->updateStatus($this->configWrapper->getBillStatusPayed());
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function onStatusCanceled()
-    {
-        $this->updateStatus($this->configWrapper->getBillStatusCanceled());
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function onStatusPending()
-    {
-        $this->updateStatus($this->configWrapper->getBillStatusPending());
-    }
-
-    /**
-     * @throws Throwable
-     */
-    public function onStatusFailed()
-    {
-        $this->updateStatus($this->configWrapper->getBillStatusFailed());
     }
 }

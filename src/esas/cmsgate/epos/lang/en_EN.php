@@ -65,20 +65,20 @@ return array(
     ConfigFieldsEpos::paymentMethodDetailsWebpay() . _DESC => 'Description of the payment method that will be shown to the client at the time of payment',
     ConfigFieldsEpos::paymentMethodDetailsWebpay() . _DEFAULT => 'Payment by card (VISA, Maestro, Belcard) view Webpay',
 
-    ConfigFieldsEpos::billStatusPending() => 'Bill status pending',
-    ConfigFieldsEpos::billStatusPending() . _DESC => 'Mapped status for pending bills',
+    ConfigFieldsEpos::orderStatusPending() => 'Invoice status pending',
+    ConfigFieldsEpos::orderStatusPending() . _DESC => 'Mapped status for pending invoices',
 
-    ConfigFieldsEpos::billStatusPayed() => 'Bill status payed',
-    ConfigFieldsEpos::billStatusPayed() . _DESC => 'Mapped status for payed bills',
+    ConfigFieldsEpos::orderStatusPayed() => 'Invoice status payed',
+    ConfigFieldsEpos::orderStatusPayed() . _DESC => 'Mapped status for payed invoices',
 
-    ConfigFieldsEpos::billStatusFailed() => 'Bill status failed',
-    ConfigFieldsEpos::billStatusFailed() . _DESC => 'Mapped status for failed bills',
+    ConfigFieldsEpos::orderStatusFailed() => 'Invoice status failed',
+    ConfigFieldsEpos::orderStatusFailed() . _DESC => 'Mapped status for failed invoices',
 
-    ConfigFieldsEpos::billStatusCanceled() => 'Bill status canceled',
-    ConfigFieldsEpos::billStatusCanceled() . _DESC => 'Mapped status for canceled bills',
+    ConfigFieldsEpos::orderStatusCanceled() => 'Invoice status canceled',
+    ConfigFieldsEpos::orderStatusCanceled() . _DESC => 'Mapped status for canceled invoices',
 
-    ConfigFieldsEpos::dueInterval() => 'Bill due interval (days)',
-    ConfigFieldsEpos::dueInterval() . _DESC => 'How many days new bill will be available for payment',
+    ConfigFieldsEpos::dueInterval() => 'Invoice due interval (days)',
+    ConfigFieldsEpos::dueInterval() . _DESC => 'How many days new invoice will be available for payment',
 
     ClientViewFieldsEpos::INSTRUCTIONS_TAB_LABEL => 'Payment instructions',
     ClientViewFieldsEpos::INSTRUCTIONS => '<p>To pay an bill in ERIP:</p>
@@ -91,7 +91,7 @@ return array(
 </ol>',
 
     ClientViewFieldsEpos::QRCODE_TAB_LABEL => 'Pay with QR-code',
-    ClientViewFieldsEpos::QRCODE_DETAILS => '<p>You can pay this bill by QR-code:</p>
+    ClientViewFieldsEpos::QRCODE_DETAILS => '<p>You can pay this invoice by QR-code:</p>
 <div align="center">@qr_code</div>
 <p>To get information about mobile apps with QR-code payment support please visit <a href="http://pay.raschet.by/" target="_blank"style="color: #8c2003;"><span>this link</span></a></p>',
 

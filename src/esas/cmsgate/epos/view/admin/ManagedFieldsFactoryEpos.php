@@ -71,10 +71,10 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
                 ->setMax(10)
                 ->setValidator(new ValidatorInteger(1, 10))
                 ->setRequired(true));
-        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::billStatusPending()));
-        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::billStatusPayed()));
-        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::billStatusFailed()));
-        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::billStatusCanceled()));
+        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusPending()));
+        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusPayed()));
+        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusFailed()));
+        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusCanceled()));
         $this->registerField(
             (new ConfigFieldCheckbox(ConfigFieldsEpos::instructionsSection())));
         $this->registerField(

@@ -45,4 +45,12 @@ abstract class RegistryEpos extends Registry
     }
 
     abstract function getUrlWebpay($orderWrapper);
+
+    /**
+     * @return HooksEpos
+     */
+    public function getHooks()
+    {
+        return parent::getHooks();
+    }
 }

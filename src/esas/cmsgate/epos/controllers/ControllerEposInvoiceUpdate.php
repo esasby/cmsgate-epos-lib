@@ -31,7 +31,7 @@ class ControllerEposInvoiceUpdate extends ControllerEpos
             if (empty($orderWrapper->getExtId())) {
                 return; // Order was not added
             }
-            $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "] Invoice[" . $orderWrapper->getExtId() . "]: ";
+            $loggerMainString = "Order[" . $orderWrapper->getOrderNumberOrId() . "] Invoice[" . $orderWrapper->getExtId() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
 
             $eposProtocol = EposProtocolFactory::getProtocol();

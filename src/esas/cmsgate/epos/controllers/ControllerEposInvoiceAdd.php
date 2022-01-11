@@ -9,6 +9,7 @@
 namespace esas\cmsgate\epos\controllers;
 
 use esas\cmsgate\epos\protocol\EposProtocolFactory;
+use esas\cmsgate\epos\RegistryEpos;
 use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
 use esas\cmsgate\protocol\Amount;
 use esas\cmsgate\epos\protocol\EposInvoiceAddRq;
@@ -33,7 +34,7 @@ class ControllerEposInvoiceAdd extends ControllerEpos
             if (!empty($orderWrapper->getExtId())) {
                 throw new Exception("Order is already processed");
             }
-            $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "]: ";
+            $loggerMainString = "Order[" . $orderWrapper->getOrderNumberOrId() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
             $invoiceAddRq = new EposInvoiceAddRq();
 //            $invoiceAddRq->setOrderNumber($orderWrapper->getOrderNumber() . '-' . (time() - strtotime("today"))); // для тестов
@@ -51,11 +52,11 @@ class ControllerEposInvoiceAdd extends ControllerEpos
             $resp = $eposProtocol->invoiceAdd($invoiceAddRq);
             if ($resp->hasError()) {
                 $this->logger->error($loggerMainString . "Invoice was not added. Setting status[" . $this->configWrapper->getBillStatusFailed() . "]...");
-                $this->onFailed($orderWrapper, $resp);
+                RegistryEpos::getRegistry()->getHooks()->onInvoiceAddFailed($orderWrapper, $resp);
                 throw new Exception($resp->getResponseMessage(), $resp->getResponseCode());
             } else {
                 $this->logger->info($loggerMainString . "Bill[" . $resp->getInvoiceId() . "] was successfully added. Updating status[" . $this->configWrapper->getBillStatusPending() . "]...");
-                $this->onSuccess($orderWrapper, $resp);
+                RegistryEpos::getRegistry()->getHooks()->onInvoiceAddSuccess($orderWrapper, $resp);
             }
             return $resp;
         } catch (Throwable $e) {
@@ -107,21 +108,6 @@ class ControllerEposInvoiceAdd extends ControllerEpos
         }
         return false;
     }
-
-    /**
-     * Изменяет статус заказа при успешном высталении счета
-     * Вынесено в отдельный метод, для возможности owerrid-а
-     * (например, кроме статуса заказа надо еще обновить статус транзакции)
-     * @param OrderWrapper $orderWrapper
-     * @param EposInvoiceAddRs $resp
-     * @throws Throwable
-     */
-    public function onSuccess(OrderWrapper $orderWrapper, EposInvoiceAddRs $resp)
-    {
-        $orderWrapper->saveExtId($resp->getInvoiceId());
-        $orderWrapper->updateStatus($this->configWrapper->getBillStatusPending());
-    }
-
     /**
      * @param OrderWrapper $orderWrapper
      * @param EposInvoiceAddRs $resp

@@ -24,7 +24,7 @@ class ControllerEposCompletionPageWebpay extends ControllerEpos
     {
         try {
             $this->checkOrderWrapper($orderWrapper);
-            $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "]: ";
+            $loggerMainString = "Order[" . $orderWrapper->getOrderNumberOrId() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
             $completionPanel = $this->registry->getCompletionPanel($orderWrapper);
             $controller = new ControllerEposWebpayForm();

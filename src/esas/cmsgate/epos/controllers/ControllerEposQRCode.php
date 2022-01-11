@@ -25,7 +25,7 @@ class ControllerEposQRCode extends ControllerEpos
     {
         try {
             $this->checkOrderWrapper($orderWrapper);
-            $loggerMainString = "Order[" . $orderWrapper->getOrderNumber() . "]: ";
+            $loggerMainString = "Order[" . $orderWrapper->getOrderNumberOrId() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
             $qrCodeRq = new EposQRCodeRq();
             $qrCodeRq->setInvoiceId($orderWrapper->getExtId());

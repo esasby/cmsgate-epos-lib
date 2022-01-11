@@ -44,7 +44,7 @@ class PaysystemConnectorEpos extends PaysystemConnector
     {
         return new PaySystemConnectorDescriptor(
             "cmsgate-epos-lib",
-            new VersionDescriptor("v1.14.1", "2021-12-07"),
+            new VersionDescriptor("v1.15.0", "2022-01-11"),
             "EPOS (ERIP Belarus) cmsgate connector",
             "www.epos.by",
             VendorDescriptor::esas(),
@@ -59,5 +59,10 @@ class PaysystemConnectorEpos extends PaysystemConnector
     public static function getInvoiceId($orderWrapper) {
         $configWrapper = RegistryEpos::getRegistry()->getConfigWrapper();
         return $configWrapper->getEposServiceProviderCode() . '-' . $configWrapper->getEposServiceCode() . '-' . $orderWrapper->getOrderNumberOrId();
+    }
+
+    public function createHooks()
+    {
+        return new HooksEpos();
     }
 }
