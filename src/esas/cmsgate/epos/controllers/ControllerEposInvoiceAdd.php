@@ -51,11 +51,11 @@ class ControllerEposInvoiceAdd extends ControllerEpos
             $eposProtocol = EposProtocolFactory::getProtocol();
             $resp = $eposProtocol->invoiceAdd($invoiceAddRq);
             if ($resp->hasError()) {
-                $this->logger->error($loggerMainString . "Invoice was not added. Setting status[" . $this->configWrapper->getBillStatusFailed() . "]...");
+                $this->logger->error($loggerMainString . "Invoice was not added. Running onInvoiceAddFailed hook...");
                 RegistryEpos::getRegistry()->getHooks()->onInvoiceAddFailed($orderWrapper, $resp);
                 throw new Exception($resp->getResponseMessage(), $resp->getResponseCode());
             } else {
-                $this->logger->info($loggerMainString . "Bill[" . $resp->getInvoiceId() . "] was successfully added. Updating status[" . $this->configWrapper->getBillStatusPending() . "]...");
+                $this->logger->info($loggerMainString . "Invoice[" . $resp->getInvoiceId() . "] was successfully added. Running onInvoiceAddSuccess hook...");
                 RegistryEpos::getRegistry()->getHooks()->onInvoiceAddSuccess($orderWrapper, $resp);
             }
             return $resp;

@@ -119,7 +119,7 @@ class EposProtocol extends ProtocolCurl
         $postData['billingInfo']['email'] = $invoiceAddRq->getEmail();
         $postData['billingInfo']['address']['line1'] = $invoiceAddRq->getFullAddress();
         if ($invoiceAddRq->getShippingAmount() != null && $invoiceAddRq->getShippingAmount()->getValue() >= 0) { // проверка =0 важно для случая, когда в заказе удалена доставка
-            $postData['shippingInfo']['amount']['value'] = $invoiceAddRq->getShippingAmount()->getValue();
+            $postData['shippingInfo']['amount']['value'] = self::formatDecimal($invoiceAddRq->getShippingAmount()->getValue());
         }
         // Список товаров/услуг
         if (empty($invoiceAddRq->getProducts())) {
@@ -130,11 +130,15 @@ class EposProtocol extends ProtocolCurl
             $item['code'] = $pr->getInvId();
             $item['name'] = htmlentities($pr->getName(), ENT_XML1);
             $item['measure'] = 'pcs';
-            $item['quantity'] = $pr->getCount();
-            $item['unitPrice']['value'] = $pr->getUnitPrice();
+            $item['quantity'] = intval($pr->getCount());
+            $item['unitPrice']['value'] = self::formatDecimal($pr->getUnitPrice());
             $items[] = $item;
         }
         $postData['items'] = $items;
+    }
+
+    private static function formatDecimal($decimal) {
+        return floatval(str_replace(",", ".", strval($decimal)));
     }
 
     public function invoiceUpdate(EposInvoiceUpdateRq $invoiceUpdateRq)
