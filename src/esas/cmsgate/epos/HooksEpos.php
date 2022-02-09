@@ -4,6 +4,7 @@
 namespace esas\cmsgate\epos;
 
 
+use esas\cmsgate\epos\protocol\EposCallbackRq;
 use esas\cmsgate\epos\protocol\EposInvoiceAddRs;
 use esas\cmsgate\epos\protocol\EposInvoiceGetRs;
 use esas\cmsgate\Hooks;
@@ -19,6 +20,9 @@ class HooksEpos extends Hooks
 
     public function onInvoiceAddFailed(OrderWrapper $orderWrapper, EposInvoiceAddRs $resp) {
         $orderWrapper->updateStatusWithLogging(OrderStatus::failed());
+    }
+
+    public function onCallbackRqRead(EposCallbackRq $rq) {
     }
 
     public function onCallbackStatusPayed(OrderWrapper $orderWrapper, EposInvoiceGetRs $resp) {

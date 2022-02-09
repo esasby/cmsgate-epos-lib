@@ -41,8 +41,10 @@ class ControllerEposWebpayForm extends ControllerEpos
             return $webPayRs;
         } catch (Throwable $e) {
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
+            Registry::getRegistry()->getMessenger()->addErrorMessage($e->getMessage());
         } catch (Exception $e) { // для совместимости с php 5
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
+            Registry::getRegistry()->getMessenger()->addErrorMessage($e->getMessage());
         }
     }
 

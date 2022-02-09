@@ -8,12 +8,14 @@
 
 namespace esas\cmsgate\epos\controllers;
 
+use esas\cmsgate\epos\utils\QRUtils;
 use esas\cmsgate\epos\utils\RequestParamsEpos;
 use esas\cmsgate\epos\view\client\CompletionPanelEpos;
+use esas\cmsgate\Registry;
 use Exception;
 use Throwable;
 
-class ControllerEposCompletionPageWebpay extends ControllerEpos
+class ControllerEposCompletionPanel extends ControllerEpos
 {
     /**
      * @param $orderId
@@ -27,17 +29,26 @@ class ControllerEposCompletionPageWebpay extends ControllerEpos
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumberOrId() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
             $completionPanel = $this->registry->getCompletionPanel($orderWrapper);
-            $controller = new ControllerEposWebpayForm();
-            $webpayResp = $controller->process($orderWrapper);
-            $completionPanel->setWebpayForm($webpayResp->getHtmlForm());
-            if (array_key_exists(RequestParamsEpos::WEBPAY_STATUS, $_REQUEST))
-                $completionPanel->setWebpayStatus($_REQUEST[RequestParamsEpos::WEBPAY_STATUS]);
+            if ($this->configWrapper->isWebpaySectionEnabled()) {
+                $controller = new ControllerEposWebpayForm();
+                $webpayResp = $controller->process($orderWrapper);
+                $completionPanel->setWebpayForm($webpayResp->getHtmlForm());
+                if (array_key_exists(RequestParamsEpos::WEBPAY_STATUS, $_REQUEST))
+                    $completionPanel->setWebpayStatus($_REQUEST[RequestParamsEpos::WEBPAY_STATUS]);
+            }
+            if ($this->configWrapper->isQRCodeSectionEnabled()) {
+                $controller = new ControllerEposQRCode();
+                $qrCodeRs = $controller->process($orderWrapper);
+                $completionPanel->setQrCode(QRUtils::createQRCode($qrCodeRs->getAddress(), $qrCodeRs->getQrData()));
+            }
             return $completionPanel;
         } catch (Throwable $e) {
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
+            Registry::getRegistry()->getMessenger()->addErrorMessage($e->getMessage());
             throw $e;
         } catch (Exception $e) { // для совместимости с php 5
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
+            Registry::getRegistry()->getMessenger()->addErrorMessage($e->getMessage());
             throw $e;
         }
     }

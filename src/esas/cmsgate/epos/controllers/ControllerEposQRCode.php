@@ -11,6 +11,7 @@ namespace esas\cmsgate\epos\controllers;
 use esas\cmsgate\epos\protocol\EposProtocolFactory;
 use esas\cmsgate\epos\protocol\EposQRCodeRq;
 use esas\cmsgate\epos\protocol\EposQRCodeRs;
+use esas\cmsgate\Registry;
 use esas\cmsgate\wrappers\OrderWrapper;
 use Exception;
 use Throwable;
@@ -35,8 +36,10 @@ class ControllerEposQRCode extends ControllerEpos
             return $qrCodeRs;
         } catch (Throwable $e) {
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
+            Registry::getRegistry()->getMessenger()->addErrorMessage($e->getMessage());
         } catch (Exception $e) { // для совместимости с php 5
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
+            Registry::getRegistry()->getMessenger()->addErrorMessage($e->getMessage());
         }
     }
 

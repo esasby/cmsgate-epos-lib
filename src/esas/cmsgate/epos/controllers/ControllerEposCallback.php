@@ -7,7 +7,6 @@ use esas\cmsgate\epos\protocol\EposInvoiceGetRs;
 use esas\cmsgate\epos\protocol\EposProtocol;
 use esas\cmsgate\epos\protocol\EposProtocolFactory;
 use esas\cmsgate\epos\RegistryEpos;
-use esas\cmsgate\utils\StringUtils;
 use esas\cmsgate\wrappers\OrderWrapper;
 use Exception;
 use Throwable;
@@ -41,6 +40,7 @@ class ControllerEposCallback extends ControllerEpos
             $this->logger->info($loggerMainString . "Controller started");
             if (empty($callbackRq->getInvoiceId()))
                 throw new Exception('Wrong invoiceId[' . $callbackRq->getInvoiceId() . "]");
+            RegistryEpos::getRegistry()->getHooks()->onCallbackRqRead($callbackRq);
             $this->logger->info($loggerMainString . "Loading order data from EPOS service...");
             $this->eposInvoiceGetRs = EposProtocolFactory::getProtocol()->invoiceGet(new EposInvoiceGetRq($callbackRq->getInvoiceId()));
             if ($this->eposInvoiceGetRs->hasError())

@@ -8,16 +8,17 @@
 
 namespace esas\cmsgate\epos\controllers;
 
-use esas\cmsgate\epos\view\client\CompletionPageEpos;
+use esas\cmsgate\epos\utils\RequestParamsEpos;
+use esas\cmsgate\epos\view\client\CompletionPanelEpos;
 use esas\cmsgate\Registry;
 use Exception;
 use Throwable;
 
-class ControllerEposCompletionPage extends ControllerEpos
+class ControllerEposCompletionPanelWebpay extends ControllerEpos
 {
     /**
      * @param $orderId
-     * @return CompletionPageEpos
+     * @return CompletionPanelEpos
      * @throws Throwable
      */
     public function process($orderWrapper)
@@ -26,13 +27,13 @@ class ControllerEposCompletionPage extends ControllerEpos
             $this->checkOrderWrapper($orderWrapper);
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumberOrId() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
-
-            $controller = new ControllerEposCompletionPanel();
-            $completionPanel = $controller->process($orderWrapper);
-            $completionPanel = $completionPanel->__toString();
-
-            $completionPage = $this->registry->getCompletionPage($orderWrapper, $completionPanel);
-            return $completionPage;
+            $completionPanel = $this->registry->getCompletionPanel($orderWrapper);
+            $controller = new ControllerEposWebpayForm();
+            $webpayResp = $controller->process($orderWrapper);
+            $completionPanel->setWebpayForm($webpayResp->getHtmlForm());
+            if (array_key_exists(RequestParamsEpos::WEBPAY_STATUS, $_REQUEST))
+                $completionPanel->setWebpayStatus($_REQUEST[RequestParamsEpos::WEBPAY_STATUS]);
+            return $completionPanel;
         } catch (Throwable $e) {
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
             Registry::getRegistry()->getMessenger()->addErrorMessage($e->getMessage());

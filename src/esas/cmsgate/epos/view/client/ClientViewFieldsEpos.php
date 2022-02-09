@@ -28,4 +28,8 @@ class ClientViewFieldsEpos extends ClientViewFields
     const WEBPAY_MSG_UNSUCCESS = 'epos_webpay_msg_unsuccess';
     const WEBPAY_MSG_UNAVAILABLE = 'epos_webpay_msg_unavailable';
     const UNKNOWN_PRODUCT = 'epos_unknown_product';
+    const EPOS_ABOUT_FULL_NAME = 'epos_about_full_name';
+    const EPOS_ABOUT_REGISTRATION_DATA = 'epos_about_registration_data';
+    const EPOS_ADDRESS_POST = 'epos_address_post';
+    const EPOS_ADDRESS_LEGAL = 'epos_address_legal';
 }

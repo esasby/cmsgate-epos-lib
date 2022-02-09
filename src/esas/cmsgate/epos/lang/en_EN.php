@@ -109,5 +109,11 @@ return array(
 
     AdminViewFieldsEpos::EPOS_PROCESSOR_ESAS => "Esas",
     AdminViewFieldsEpos::EPOS_PROCESSOR_UPS => "UPS",
-    AdminViewFieldsEpos::EPOS_PROCESSOR_RRB => "RRB Bank"
+    AdminViewFieldsEpos::EPOS_PROCESSOR_RRB => "RRB Bank",
+
+    ClientViewFieldsEpos::EPOS_ABOUT_REGISTRATION_DATA => 'Общество с ограниченной ответственностью "Электронные системы и сервисы" (www.esas.by)',
+    ClientViewFieldsEpos::EPOS_ABOUT_FULL_NAME => 'Свидетельство о гос. регистрации с регистрационным номером 191358568 от 26.08.2010, выданное Минским горисполкомом. (УНП: 191358568)',
+    ClientViewFieldsEpos::EPOS_ADDRESS_LEGAL => 'Legal address: 220073, Miksk, ул. Скрыганова, 6-316',
+    ClientViewFieldsEpos::EPOS_ADDRESS_POST => 'Post address: Nemiga st, 40, подъезд 1, office. 501, 220004 Беларусь.',
+
 );

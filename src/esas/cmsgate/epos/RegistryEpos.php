@@ -9,9 +9,11 @@
 namespace esas\cmsgate\epos;
 
 
+use esas\cmsgate\epos\view\client\CompletionPageEpos;
 use esas\cmsgate\Registry;
 use esas\cmsgate\epos\view\client\CompletionPanelEpos;
 use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
+use esas\cmsgate\utils\CMSGateException;
 
 /**
  * @package esas\cmsgate
@@ -36,8 +38,17 @@ abstract class RegistryEpos extends Registry
 
     public function getCompletionPanel($orderWrapper)
     {
-        $completionPanel = new CompletionPanelEpos($orderWrapper);
-        return $completionPanel;
+        return new CompletionPanelEpos($orderWrapper);
+    }
+
+    /**
+     * @param $orderWrapper
+     * @param $completionPanel
+     * @throws CMSGateException
+     */
+    public function getCompletionPage($orderWrapper, $completionPanel)
+    {
+        return new CompletionPageEpos($orderWrapper, $completionPanel);
     }
 
     public function getPaySystemName() {
@@ -46,11 +57,4 @@ abstract class RegistryEpos extends Registry
 
     abstract function getUrlWebpay($orderWrapper);
 
-    /**
-     * @return HooksEpos
-     */
-    public function getHooks()
-    {
-        return parent::getHooks();
-    }
 }

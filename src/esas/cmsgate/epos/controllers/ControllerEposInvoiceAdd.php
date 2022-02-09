@@ -61,9 +61,11 @@ class ControllerEposInvoiceAdd extends ControllerEpos
             return $resp;
         } catch (Throwable $e) {
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
+            Registry::getRegistry()->getMessenger()->addErrorMessage($e->getMessage());
             throw $e;
         } catch (Exception $e) { // для совместимости с php 5
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
+            Registry::getRegistry()->getMessenger()->addErrorMessage($e->getMessage());
             throw $e;
         }
     }
@@ -107,14 +109,5 @@ class ControllerEposInvoiceAdd extends ControllerEpos
             $invoiceAddRq->setProducts([$product]); //остальные продукты удаляем, т.к. EPOS считает по ним суммы
         }
         return false;
-    }
-    /**
-     * @param OrderWrapper $orderWrapper
-     * @param EposInvoiceAddRs $resp
-     * @throws Throwable
-     */
-    public function onFailed(OrderWrapper $orderWrapper, EposInvoiceAddRs $resp)
-    {
-        $orderWrapper->updateStatus($this->configWrapper->getBillStatusFailed());
     }
 }

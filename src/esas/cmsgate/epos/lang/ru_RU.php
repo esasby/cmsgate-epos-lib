@@ -112,5 +112,11 @@ style="color: #8c2003;"><span>здесь</span></a></p>',
 
     AdminViewFieldsEpos::EPOS_PROCESSOR_ESAS => "Электронные системы и сервисы",
     AdminViewFieldsEpos::EPOS_PROCESSOR_UPS => "Универсальные платежные системы",
-    AdminViewFieldsEpos::EPOS_PROCESSOR_RRB => "РРБ Банк"
+    AdminViewFieldsEpos::EPOS_PROCESSOR_RRB => "РРБ Банк",
+
+    ClientViewFieldsEpos::EPOS_ABOUT_REGISTRATION_DATA => 'Общество с ограниченной ответственностью "Электронные системы и сервисы" (www.esas.by)',
+    ClientViewFieldsEpos::EPOS_ABOUT_FULL_NAME => 'Свидетельство о гос. регистрации с регистрационным номером 191358568 от 26.08.2010, выданное Минским горисполкомом. (УНП: 191358568)',
+    ClientViewFieldsEpos::EPOS_ADDRESS_LEGAL => 'Юридический адрес: 220073, г. Минск, ул. Скрыганова, 6-316',
+    ClientViewFieldsEpos::EPOS_ADDRESS_POST => 'Почтовый адрес: ул. Немига, 40, подъезд 1, оф. 501 г. Минск, 220004 Беларусь.',
+
 );
