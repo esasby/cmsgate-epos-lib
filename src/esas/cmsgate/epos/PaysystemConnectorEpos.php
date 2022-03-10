@@ -12,6 +12,7 @@ namespace esas\cmsgate\epos;
 use esas\cmsgate\descriptors\PaySystemConnectorDescriptor;
 use esas\cmsgate\descriptors\VendorDescriptor;
 use esas\cmsgate\descriptors\VersionDescriptor;
+use esas\cmsgate\epos\controllers\ControllerEposLogin;
 use esas\cmsgate\epos\lang\TranslatorEpos;
 use esas\cmsgate\epos\view\admin\ManagedFieldsFactoryEpos;
 use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
@@ -44,7 +45,7 @@ class PaysystemConnectorEpos extends PaysystemConnector
     {
         return new PaySystemConnectorDescriptor(
             "cmsgate-epos-lib",
-            new VersionDescriptor("v1.16.0", "2022-02-09"),
+            new VersionDescriptor("v1.17.0", "2022-03-09"),
             "EPOS (ERIP Belarus) cmsgate connector",
             "www.epos.by",
             VendorDescriptor::esas(),
@@ -64,5 +65,11 @@ class PaysystemConnectorEpos extends PaysystemConnector
     public function createHooks()
     {
         return new HooksEpos();
+    }
+
+    public function checkAuth($login, $password, $sandbox)
+    {
+        $controllre = new ControllerEposLogin();
+        $controllre->process($login, $password, $sandbox);
     }
 }

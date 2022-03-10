@@ -2,7 +2,6 @@
 
 namespace esas\cmsgate\epos\protocol;
 
-use esas\cmsgate\epos\RegistryEpos;
 use esas\cmsgate\protocol\ProtocolCurl;
 use esas\cmsgate\protocol\RqMethod;
 use esas\cmsgate\protocol\RsType;
@@ -19,9 +18,9 @@ class IiiProtocol extends ProtocolCurl
     /**
      * @throws Exception
      */
-    public function __construct()
+    public function __construct($configWrapper)
     {
-        parent::__construct(self::III_URL_REAL, self::III_URL_TEST);
+        parent::__construct(self::III_URL_REAL, self::III_URL_TEST, $configWrapper);
     }
 
 
@@ -35,7 +34,7 @@ class IiiProtocol extends ProtocolCurl
         $authRs = new IiiAuthRs();
         try {
             if ($authRq == null)
-                $authRq = new IiiAuthRq(RegistryEpos::getRegistry()->getConfigWrapper()->getIiiClientId(), RegistryEpos::getRegistry()->getConfigWrapper()->getIiiClientSecret());
+                $authRq = new IiiAuthRq($this->configurationWrapper->getIiiClientId(), $this->configurationWrapper->getIiiClientSecret());
             $this->logger->info("Logging in: host[" . $this->connectionUrl . "], clientId[" . $authRq->getClientId() . "]");
             if (empty($authRq->getClientId()) || empty($authRq->getClientSecret())) {
                 throw new Exception("Ошибка конфигурации! Не задан clientId или clientSecret", EposRs::ERROR_CONFIG);
@@ -43,8 +42,8 @@ class IiiProtocol extends ProtocolCurl
             $postData = array();
             $postData['grant_type'] = 'client_credentials';
             $postData['scope'] = 'epos.public.invoice';
-            $postData['client_id'] = RegistryEpos::getRegistry()->getConfigWrapper()->getIiiClientId();
-            $postData['client_secret'] = RegistryEpos::getRegistry()->getConfigWrapper()->getIiiClientSecret();
+            $postData['client_id'] = $authRq->getClientId();
+            $postData['client_secret'] = $authRq->getClientSecret();
             // запрос
             $res = $this->requestPost($this->connectionUrl, $postData, RsType::_ARRAY);
             if ($res == null || !is_array($res) || !array_key_exists('access_token', $res)) {
