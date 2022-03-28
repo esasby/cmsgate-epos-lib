@@ -18,7 +18,7 @@ class IiiProtocol extends ProtocolCurl
     /**
      * @throws Exception
      */
-    public function __construct($configWrapper)
+    public function __construct($configWrapper = null)
     {
         parent::__construct(self::III_URL_REAL, self::III_URL_TEST, $configWrapper);
     }
