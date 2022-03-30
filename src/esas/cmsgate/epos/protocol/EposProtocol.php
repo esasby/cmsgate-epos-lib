@@ -11,6 +11,7 @@ use esas\cmsgate\protocol\ProtocolError;
 use esas\cmsgate\protocol\RqMethod;
 use esas\cmsgate\protocol\RsType;
 use esas\cmsgate\utils\CMSGateException;
+use esas\cmsgate\utils\Logger;
 use Exception;
 use Throwable;
 
@@ -422,8 +423,10 @@ class EposProtocol extends ProtocolCurl
     {
         $callbackRq = $_SESSION["epos_callback_rq"];
         if ($callbackRq == null || !($callbackRq instanceof EposCallbackRq)) {
-            $callbackData = json_decode(file_get_contents('php://input'), true);
-            $callbackRq = new EposCallbackRq($callbackData["id"], $callbackData["claimId"]);
+            $callbackStr = file_get_contents('php://input');
+            Logger::getLogger("EposProtocol")->info("Got callback: " . $callbackStr);
+            $callbackData = json_decode($callbackStr, true);
+            $callbackRq = new EposCallbackRq(strtolower($callbackData["parentId"]), $callbackData["claimId"]); //при оплате создается новый идентичный счет с другим id, а старый созраняется на случай разборок. В коллбэке есть старый id счета, который создавался - parentId
             $_SESSION["epos_callback_rq"] = $callbackRq; //сохраняем в сессии, т.к. file_get_contents('php://input') не всегда корректно читается несколько раз
         }
         CMSGateException::throwIfNull($callbackRq, "Can not read callback rq");
