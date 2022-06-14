@@ -45,7 +45,7 @@ class PaysystemConnectorEpos extends PaysystemConnector
     {
         return new PaySystemConnectorDescriptor(
             "cmsgate-epos-lib",
-            new VersionDescriptor("v1.17.2", "2022-03-30"),
+            new VersionDescriptor("v1.17.3", "2022-06-14"),
             "EPOS (ERIP Belarus) cmsgate connector",
             "www.epos.by",
             VendorDescriptor::esas(),

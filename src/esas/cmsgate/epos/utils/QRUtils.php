@@ -37,14 +37,15 @@ class QRUtils
             rawurlencode($qrData); // rawurlencode вместо urlencode для корректной кодировки пробелов
 //            strtoupper(self::tlv(63, substr(str_replace("-", "", hash('sha256', $qrData)), -4)));
         $barcode = new Barcode();
-        $bobj = $barcode->getBarcodeObj(
-            'QRCODE,H',                     // barcode type and additional comma-separated parameters
-            $qrCodeString,          // data string to encode
-            -4,                             // bar width (use absolute or negative value as multiplication factor)
-            -4,                             // bar height (use absolute or negative value as multiplication factor)
-            'black',                        // foreground color
-            array(-2, -2, -2, -2)           // padding (use absolute or negative values as multiplication factors)
-        );
+        $bobj = $barcode
+            ->getBarcodeObj(
+                'QRCODE,H',                     // barcode type and additional comma-separated parameters
+                $qrCodeString,          // data string to encode
+                -4,                             // bar width (use absolute or negative value as multiplication factor)
+                -4,                             // bar height (use absolute or negative value as multiplication factor)
+                'black',                        // foreground color
+                array(-2, -2, -2, -2))          // padding (use absolute or negative values as multiplication factors)
+            ->setBackgroundColor('white');
         return $bobj->getSvgCode();
     }
 
