@@ -32,7 +32,7 @@ class ControllerEposWebpayForm extends ControllerEpos
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumberOrId() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
             $webPayRq = new EposWebPayRq();
-            $webPayRq->setInvoiceId($orderWrapper->getExtId());
+            $webPayRq->setInvoiceId($orderWrapper->getExtIdNotEmpty());
             $webPayRq->setReturnUrl($this->generateSuccessReturnUrl($orderWrapper));
             $webPayRq->setCancelReturnUrl($this->generateUnsuccessReturnUrl($orderWrapper));
             $webPayRq->setButtonLabel(Registry::getRegistry()->getTranslator()->translate(ClientViewFieldsEpos::WEBPAY_BUTTON_LABEL));
