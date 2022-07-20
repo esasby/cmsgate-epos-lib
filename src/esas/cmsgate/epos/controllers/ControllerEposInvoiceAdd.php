@@ -31,7 +31,7 @@ class ControllerEposInvoiceAdd extends ControllerEpos
     {
         try {
             $this->checkOrderWrapper($orderWrapper);
-            if (!empty($orderWrapper->getExtId())) {
+            if ($orderWrapper->isExtIdFilled()) {
                 throw new Exception("Order is already processed");
             }
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumberOrId() . "]: ";
