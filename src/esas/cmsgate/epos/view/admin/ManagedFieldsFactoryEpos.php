@@ -71,10 +71,18 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
                 ->setMax(10)
                 ->setValidator(new ValidatorInteger(1, 10))
                 ->setRequired(true));
-        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusPending()));
-        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusPayed()));
-        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusFailed()));
-        $this->registerField(new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusCanceled()));
+        $this->registerField(
+            (new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusPending()))
+                ->setRequired(true));
+        $this->registerField(
+            (new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusPayed()))
+                ->setRequired(true));
+        $this->registerField(
+            (new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusFailed()))
+                ->setRequired(true));
+        $this->registerField(
+            (new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusCanceled()))
+                ->setRequired(true));
         $this->registerField(
             (new ConfigFieldCheckbox(ConfigFieldsEpos::instructionsSection())));
         $this->registerField(
@@ -85,9 +93,7 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
             (new ConfigFieldRichtext(ConfigFieldsEpos::completionText()))
                 ->setRequired(true));
         $this->registerField(
-            (new ConfigFieldText(ConfigFieldsEpos::completionCssFile()))
-                ->setRequired(false)
-                ->setValidator(new ValidatorImpl()));
+            (new ConfigFieldText(ConfigFieldsEpos::completionCssFile())));
         $this->registerField(
             (new ConfigFieldText(ConfigFieldsEpos::paymentMethodName()))
                 ->setRequired(true)
