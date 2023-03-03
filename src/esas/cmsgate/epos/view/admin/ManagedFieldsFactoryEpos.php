@@ -90,8 +90,7 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
         $this->registerField(
             (new ConfigFieldCheckbox(ConfigFieldsEpos::webpaySection())));
         $this->registerField(
-            (new ConfigFieldRichtext(ConfigFieldsEpos::completionText()))
-                ->setRequired(true));
+            (new ConfigFieldRichtext(ConfigFieldsEpos::completionText())));
         $this->registerField(
             (new ConfigFieldText(ConfigFieldsEpos::completionCssFile())));
         $this->registerField(
