@@ -8,8 +8,9 @@
 
 namespace esas\cmsgate\epos\controllers;
 
-use esas\cmsgate\epos\view\client\CompletionPageEpos;
 use esas\cmsgate\Registry;
+use esas\cmsgate\utils\htmlbuilder\hro\HROFactory;
+use esas\cmsgate\view\client\ClientOrderCompletionPageHRO;
 use Exception;
 use Throwable;
 
@@ -17,7 +18,7 @@ class ControllerEposCompletionPage extends ControllerEpos
 {
     /**
      * @param $orderId
-     * @return CompletionPageEpos
+     * @return ClientOrderCompletionPageHRO
      * @throws Throwable
      */
     public function process($orderWrapper)
@@ -31,8 +32,9 @@ class ControllerEposCompletionPage extends ControllerEpos
             $completionPanel = $controller->process($orderWrapper);
             $completionPanel = $completionPanel->__toString();
 
-            $completionPage = $this->registry->getCompletionPage($orderWrapper, $completionPanel);
-            return $completionPage;
+            return HROFactory::fromRegistry()->createClientOrderCompletionPage()
+                ->setOrderWrapper($orderWrapper)
+                ->setElementCompletionPanel($completionPanel);
         } catch (Throwable $e) {
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
             Registry::getRegistry()->getMessenger()->addErrorMessage($e->getMessage());
