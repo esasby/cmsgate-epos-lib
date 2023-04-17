@@ -7,7 +7,7 @@
  */
 
 /** @var array $scriptData */
-/** @var \esas\cmsgate\epos\view\client\CompletionPanelEpos $completionPanel */
+/** @var \esas\cmsgate\epos\view\client\CompletionPanelEposHRO_v1 $completionPanel */
 $completionPanel = $this->scriptData["completionPanel"];
 ?>
 

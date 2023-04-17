@@ -10,43 +10,19 @@ namespace esas\cmsgate\epos\view\client;
 
 
 use esas\cmsgate\epos\utils\ResourceUtilsEpos;
-use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
 use esas\cmsgate\lang\Translator;
-use esas\cmsgate\Registry;
 use esas\cmsgate\utils\htmlbuilder\Attributes as attribute;
 use esas\cmsgate\utils\htmlbuilder\Elements as element;
-use esas\cmsgate\utils\Logger;
-use esas\cmsgate\wrappers\OrderWrapper;
 
 /**
- * Class CompletionPanelEpos используется для формирования итоговой страницы. Основной класс
+ * Class CompletionPanelEposHRO_v1 используется для формирования итоговой страницы. Основной класс
  * для темазависимого представления (HGCMS-23).
  * Разбит на множество мелких методов для возможности легкого переопрделения. Что позволяет формировать итоговоую
  * страницу в тегах и CSS-классах принятых в конкретных CMS
- * todo replace with HRO
  * @package esas\epos\view\client
  */
-class CompletionPanelEpos
+class CompletionPanelEposHRO_v1 implements CompletionPanelEposHRO
 {
-    /**
-     * @var Logger
-     */
-    protected $logger;
-    /**
-     * @var ConfigWrapperEpos
-     */
-    private $configWrapper;
-
-    /**
-     * @var OrderWrapper
-     */
-    private $orderWrapper;
-
-    private $webpayForm;
-    private $webpayStatus;
-
-    private $qrCode;
-
     /**
      * Флаг, когда только один таб
      * и не нужна возможность выбора (например при renderWebpayOnly)
@@ -54,38 +30,118 @@ class CompletionPanelEpos
      */
     private $onlyOneTab = false;
 
+    protected $completionText;
+    protected $instructionText;
+    protected $webpayForm;
+    protected $webpayStatus;
+    protected $qrCode;
     /**
-     * ViewData constructor.
-     * @param OrderWrapper $orderWrapper
+     * @var boolean
      */
-    public function __construct($orderWrapper)
-    {
-        $this->logger = Logger::getLogger(get_class($this));
-        $this->configWrapper = Registry::getRegistry()->getConfigWrapper();
-        $this->orderWrapper = $orderWrapper;
+    protected $instructionSectionEnable;
+    /**
+     * @var boolean
+     */
+    protected $qrcodeSectionEnable;
+    /**
+     * @var boolean
+     */
+    protected $webpaySectionEnable;
+    protected $additionalCSSFile;
+
+    /**
+     * @param mixed $instructionText
+     * @return CompletionPanelEposHRO_v1
+     */
+    public function setInstructionText($instructionText) {
+        $this->instructionText = $instructionText;
+        return $this;
     }
 
-    public function __toString()
-    {
+    /**
+     * @param mixed $completionText
+     * @return CompletionPanelEposHRO_v1
+     */
+    public function setCompletionText($completionText) {
+        $this->completionText = $completionText;
+        return $this;
+    }
+
+    /**
+     * @param mixed $webpayForm
+     * @return CompletionPanelEposHRO_v1
+     */
+    public function setWebpayForm($webpayForm) {
+        $this->webpayForm = $webpayForm;
+        return $this;
+    }
+
+    /**
+     * @param mixed $webpayStatus
+     * @return CompletionPanelEposHRO_v1
+     */
+    public function setWebpayStatus($webpayStatus) {
+        $this->webpayStatus = $webpayStatus;
+        return $this;
+    }
+
+    /**
+     * @param mixed $qrCode
+     * @return CompletionPanelEposHRO_v1
+     */
+    public function setQrCode($qrCode) {
+        $this->qrCode = $qrCode;
+        return $this;
+    }
+
+    /**
+     * @param bool $instructionSectionEnable
+     * @return CompletionPanelEposHRO_v1
+     */
+    public function setInstructionsSectionEnabled($instructionSectionEnable) {
+        $this->instructionSectionEnable = $instructionSectionEnable;
+        return $this;
+    }
+
+    /**
+     * @param bool $qrcodeSectionEnable
+     * @return CompletionPanelEposHRO_v1
+     */
+    public function setQRCodeSectionEnabled($qrcodeSectionEnable) {
+        $this->qrcodeSectionEnable = $qrcodeSectionEnable;
+        return $this;
+    }
+
+    /**
+     * @param bool $webpaySectionEnable
+     * @return CompletionPanelEposHRO_v1
+     */
+    public function setWebpaySectionEnabled($webpaySectionEnable) {
+        $this->webpaySectionEnable = $webpaySectionEnable;
+        return $this;
+    }
+
+
+
+    public static function builder() {
+        return new CompletionPanelEposHRO_v1();
+    }
+
+    public function build() {
         $this->onlyOneTab = false;
-        $completionPanel = element::content(
-            element::div(
-                attribute::id("completion-text"),
-                attribute::clazz($this->getCssClass4CompletionTextDiv()),
-                element::content($this->getCompletionText())
-            ),
-            element::div(
-                attribute::id("epos-completion-tabs"),
-                attribute::clazz($this->getCssClass4TabsGroup()),
-                $this->addTabs()),
-            $this->addCss()
-        );
-        return $completionPanel;
-    }
-
-    public function render()
-    {
-        echo $this->__toString();
+        return
+            element::content(
+                element::div(
+                    attribute::id("completion-text"),
+                    attribute::clazz($this->getCssClass4CompletionTextDiv()),
+                    element::content($this->completionText)
+                ),
+                element::div(
+                    attribute::id("epos-completion-tabs"),
+                    attribute::clazz($this->getCssClass4TabsGroup()),
+                    $this->addTabs()),
+                $this->addCss()
+            );
     }
 
     public function renderWebpayOnly()
@@ -95,7 +151,7 @@ class CompletionPanelEpos
             $this->elementTab(
                 self::TAB_KEY_WEBPAY,
                 $this->getWebpayTabLabel(),
-                $this->elementWebpayTabContent($this->getWebpayStatus(), $this->getWebpayForm())
+                $this->elementWebpayTabContent()
             );
         echo $completionPanel;
     }
@@ -107,7 +163,7 @@ class CompletionPanelEpos
             $this->elementTab(
                 self::TAB_KEY_WEBPAY,
                 $this->getWebpayTabLabel(),
-                $this->elementWebpayTabContent($this->getWebpayStatus(), $this->getWebpayForm())
+                $this->elementWebpayTabContent()
             ),
             element::includeFile(dirname(__FILE__) . "/webpayAutoSubmitJs.php", ["completionPanel" => $this])
 
@@ -129,7 +185,7 @@ class CompletionPanelEpos
         return array(
             element::styleFile($this->getCoreCSSFilePath()), // CSS для аккордеона, общий для всех
             element::styleFile($this->getModuleCSSFilePath()), // CSS, специфичный для модуля
-            element::styleFile($this->getAdditionalCSSFilePath())
+            element::styleFile($this->additionalCSSFile)
         );
     }
 
@@ -139,47 +195,6 @@ class CompletionPanelEpos
     public function getInstructionsTabLabel()
     {
         return Translator::fromRegistry()->translate(ClientViewFieldsEpos::INSTRUCTIONS_TAB_LABEL);
-    }
-
-    /**
-     * @return string
-     */
-    public function getInstructionsText()
-    {
-        return $this->configWrapper->cookText(Translator::fromRegistry()->translate(ClientViewFieldsEpos::INSTRUCTIONS), $this->orderWrapper);
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getCompletionText()
-    {
-        return $this->configWrapper->cookText($this->configWrapper->getCompletionText(), $this->orderWrapper);
-    }
-
-    /**
-     * @return bool
-     */
-    public function isInstructionsSectionEnabled()
-    {
-        return $this->configWrapper->isInstructionsSectionEnabled();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isWebpaySectionEnabled()
-    {
-        return $this->configWrapper->isWebpaySectionEnabled();
-    }
-
-    /**
-     * @return bool
-     */
-    public function isQRCodeSectionEnabled()
-    {
-        return $this->configWrapper->isQRCodeSectionEnabled();
     }
 
     /**
@@ -196,56 +211,8 @@ class CompletionPanelEpos
     public function getQRCodeDetails()
     {
         return strtr(Translator::fromRegistry()->translate(ClientViewFieldsEpos::QRCODE_DETAILS), array(
-            "@qr_code" => $this->getQrCode()
+            "@qr_code" => $this->qrCode
         ));
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getWebpayForm()
-    {
-        return $this->webpayForm;
-    }
-
-    /**
-     * @param mixed $webpayForm
-     */
-    public function setWebpayForm($webpayForm)
-    {
-        $this->webpayForm = $webpayForm;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getQrCode()
-    {
-        return $this->qrCode;
-    }
-
-    /**
-     * @param mixed $qrCode
-     */
-    public function setQrCode($qrCode)
-    {
-        $this->qrCode = $qrCode;
-    }
-
-    /**
-     * @return string
-     */
-    public function getWebpayStatus()
-    {
-        return $this->webpayStatus;
-    }
-
-    /**
-     * @param mixed $webpayStatus
-     */
-    public function setWebpayStatus($webpayStatus)
-    {
-        $this->webpayStatus = $webpayStatus;
     }
 
     /**
@@ -254,47 +221,6 @@ class CompletionPanelEpos
     public function getWebpayTabLabel()
     {
         return Translator::fromRegistry()->translate(ClientViewFieldsEpos::WEBPAY_TAB_LABEL);
-    }
-
-    /**
-     * @return string
-     */
-    public function getWebpayButtonLabel()
-    {
-        return Translator::fromRegistry()->translate(ClientViewFieldsEpos::WEBPAY_BUTTON_LABEL);
-    }
-
-
-    /**
-     * @return string
-     */
-    public function getWebpayDetails()
-    {
-        return Translator::fromRegistry()->translate(ClientViewFieldsEpos::WEBPAY_DETAILS);
-    }
-
-    /**
-     * @return string
-     */
-    public function getWebpayMsgSuccess()
-    {
-        return Translator::fromRegistry()->translate(ClientViewFieldsEpos::WEBPAY_MSG_SUCCESS);
-    }
-
-    /**
-     * @return string
-     */
-    public function getWebpayMsgUnsuccess()
-    {
-        return Translator::fromRegistry()->translate(ClientViewFieldsEpos::WEBPAY_MSG_UNSUCCESS);
-    }
-
-    /**
-     * @return string
-     */
-    public function getWebpayMsgUnavailable()
-    {
-        return Translator::fromRegistry()->translate(ClientViewFieldsEpos::WEBPAY_MSG_UNAVAILABLE);
     }
 
     public function elementTab($key, $header, $body)
@@ -350,7 +276,7 @@ class CompletionPanelEpos
     {
         if ($this->isOnlyOneTabEnabled())
             return true;
-        $webpayStatusPresent = '' != $this->getWebpayStatus();
+        $webpayStatusPresent = '' != $this->webpayStatus;
         switch ($tabKey) {
             case self::TAB_KEY_INSTRUCTIONS:
                 return !$webpayStatusPresent;
@@ -369,11 +295,11 @@ class CompletionPanelEpos
         if ($this->onlyOneTab)
             return true;
         $enabledTabsCount = 0;
-        if ($this->configWrapper->isInstructionsSectionEnabled())
+        if ($this->instructionSectionEnable)
             $enabledTabsCount++;
-        if ($this->configWrapper->isQRCodeSectionEnabled())
+        if ($this->qrcodeSectionEnable)
             $enabledTabsCount++;
-        if ($this->configWrapper->isWebpaySectionEnabled())
+        if ($this->webpaySectionEnable)
             $enabledTabsCount++;
         return $enabledTabsCount == 1;
     }
@@ -384,29 +310,29 @@ class CompletionPanelEpos
 
     public function elementWebpayTab()
     {
-        if ($this->isWebpaySectionEnabled()) {
+        if ($this->webpaySectionEnable) {
             return $this->elementTab(
                 self::TAB_KEY_WEBPAY,
                 $this->getWebpayTabLabel(),
-                $this->elementWebpayTabContent($this->getWebpayStatus(), $this->getWebpayForm()));
+                $this->elementWebpayTabContent());
         }
         return "";
     }
 
     public function elementInstructionsTab()
     {
-        if ($this->isInstructionsSectionEnabled()) {
+        if ($this->instructionSectionEnable) {
             return $this->elementTab(
                 self::TAB_KEY_INSTRUCTIONS,
                 $this->getInstructionsTabLabel(),
-                $this->getInstructionsText());
+                $this->instructionText);
         }
         return "";
     }
 
     public function elementQRCodeTab()
     {
-        if ($this->isQRCodeSectionEnabled()) {
+        if ($this->qrcodeSectionEnable) {
             return $this->elementTab(
                 self::TAB_KEY_QRCODE,
                 $this->getQRCodeTabLabel(),
@@ -425,18 +351,19 @@ class CompletionPanelEpos
         return "";
     }
 
-    public function getAdditionalCSSFilePath()
+    public function setAdditionalCSSFile($fileName)
     {
-        if ("default" == $this->configWrapper->getCompletionCssFile())
-            return dirname(__FILE__) . "/completion-default.css";
-        else if (!empty($this->configWrapper->getCompletionCssFile()))
-            return $_SERVER['DOCUMENT_ROOT'] . $this->configWrapper->getCompletionCssFile();
+        if ("default" == $fileName)
+            $this->additionalCSSFile = dirname(__FILE__) . "/completion-default.css";
+        else if (!empty($fileName))
+            $this->additionalCSSFile = $_SERVER['DOCUMENT_ROOT'] . $fileName;
+        return $this;
     }
 
     const STATUS_PAYED = 'payed';
     const STATUS_FAILED = 'failed';
 
-    public function elementWebpayTabContent($status, $webpayForm)
+    public function elementWebpayTabContent()
     {
         $ret =
             element::div(
@@ -444,9 +371,9 @@ class CompletionPanelEpos
                 element::content(Translator::fromRegistry()->translate(ClientViewFieldsEpos::WEBPAY_DETAILS)),
                 element::br());
 
-        $ret .= $this->elementWebpayTabContentResultMsg($status);
+        $ret .= $this->elementWebpayTabContentResultMsg($this->webpayStatus);
 
-        if ("" != $webpayForm) {
+        if ("" != $this->webpayForm) {
             $ret .=
                 element::div(
                     attribute::id("webpay"),
@@ -457,7 +384,7 @@ class CompletionPanelEpos
                         attribute::alt("")
                     ),
                     element::br(),
-                    element::content($webpayForm),
+                    element::content($this->webpayForm),
                     element::includeFile(dirname(__FILE__) . "/webpayJs.php", ["completionPanel" => $this]));
         } else {
             $ret .=
