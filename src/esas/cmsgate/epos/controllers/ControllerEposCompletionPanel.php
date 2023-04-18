@@ -11,6 +11,7 @@ namespace esas\cmsgate\epos\controllers;
 use esas\cmsgate\epos\utils\QRUtils;
 use esas\cmsgate\epos\utils\RequestParamsEpos;
 use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
+use esas\cmsgate\epos\view\client\CompletionPanelEposHRO;
 use esas\cmsgate\epos\view\HROFactoryEpos;
 use esas\cmsgate\lang\Translator;
 use esas\cmsgate\Registry;
@@ -21,7 +22,7 @@ class ControllerEposCompletionPanel extends ControllerEpos
 {
     /**
      * @param $orderId
-     * @return CompletionPanelEposHRO_v1
+     * @return CompletionPanelEposHRO
      * @throws Throwable
      */
     public function process($orderWrapper) {
