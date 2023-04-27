@@ -8,9 +8,9 @@
 
 namespace esas\cmsgate\epos\controllers;
 
+use esas\cmsgate\hro\pages\ClientOrderCompletionPageHRO;
+use esas\cmsgate\hro\pages\ClientOrderCompletionPageHROFactory;
 use esas\cmsgate\Registry;
-use esas\cmsgate\utils\htmlbuilder\hro\HROFactoryCmsGate;
-use esas\cmsgate\view\client\ClientOrderCompletionPageHRO;
 use Exception;
 use Throwable;
 
@@ -32,7 +32,7 @@ class ControllerEposCompletionPage extends ControllerEpos
             $completionPanel = $controller->process($orderWrapper);
             $completionPanel = $completionPanel->__toString();
 
-            return HROFactoryCmsGate::fromRegistry()->createClientOrderCompletionPage()
+            return ClientOrderCompletionPageHROFactory::createBuilder()
                 ->setOrderWrapper($orderWrapper)
                 ->setElementCompletionPanel($completionPanel);
         } catch (Throwable $e) {

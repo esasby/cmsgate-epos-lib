@@ -8,8 +8,6 @@
 
 namespace esas\cmsgate\epos\controllers;
 
-use Throwable;
-
 /**
  * Для совместимости
  * Class ControllerEposAddInvoice

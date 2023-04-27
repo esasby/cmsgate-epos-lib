@@ -8,9 +8,10 @@
 
 namespace esas\cmsgate\epos\controllers;
 
+use esas\cmsgate\epos\hro\client\CompletionPanelEposHRO;
+use esas\cmsgate\epos\hro\client\CompletionPanelEposHROFactory;
 use esas\cmsgate\epos\utils\RequestParamsEpos;
-use esas\cmsgate\epos\view\client\CompletionPanelEposHRO_v1;
-use esas\cmsgate\epos\view\HROFactoryEpos;
+use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
 use esas\cmsgate\Registry;
 use Exception;
 use Throwable;
@@ -19,7 +20,7 @@ class ControllerEposCompletionPanelWebpay extends ControllerEpos
 {
     /**
      * @param $orderId
-     * @return CompletionPanelEposHRO_v1
+     * @return CompletionPanelEposHRO
      * @throws Throwable
      */
     public function process($orderWrapper) {
@@ -27,12 +28,12 @@ class ControllerEposCompletionPanelWebpay extends ControllerEpos
             $this->checkOrderWrapper($orderWrapper);
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumberOrId() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
-            $completionPanel = HROFactoryEpos::fromRegistry()->createCompletionPanelEposBuilder();
+            $completionPanel = CompletionPanelEposHROFactory::findBuilder();
             $completionPanel
-                ->setCompletionText($this->configWrapper->cookText($this->configWrapper->getCompletionText(), $orderWrapper))
+                ->setCompletionText(ConfigWrapperEpos::fromRegistry()->cookText(ConfigWrapperEpos::fromRegistry()->getCompletionText(), $orderWrapper))
                 ->setQRCodeSectionEnabled(false)
                 ->setInstructionsSectionEnabled(false)
-                ->setAdditionalCSSFile($this->configWrapper->getCompletionCssFile());
+                ->setAdditionalCSSFile(ConfigWrapperEpos::fromRegistry()->getCompletionCssFile());
             $controller = new ControllerEposWebpayForm();
             $webpayResp = $controller->process($orderWrapper);
             $completionPanel->setWebpayForm($webpayResp->getHtmlForm());

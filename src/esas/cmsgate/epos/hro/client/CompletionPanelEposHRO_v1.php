@@ -6,10 +6,11 @@
  * Time: 11:27
  */
 
-namespace esas\cmsgate\epos\view\client;
+namespace esas\cmsgate\epos\hro\client;
 
 
 use esas\cmsgate\epos\utils\ResourceUtilsEpos;
+use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
 use esas\cmsgate\lang\Translator;
 use esas\cmsgate\utils\htmlbuilder\Attributes as attribute;
 use esas\cmsgate\utils\htmlbuilder\Elements as element;

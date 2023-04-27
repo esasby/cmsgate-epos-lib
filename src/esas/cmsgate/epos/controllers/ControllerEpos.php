@@ -10,19 +10,12 @@ namespace esas\cmsgate\epos\controllers;
 
 
 use esas\cmsgate\controllers\Controller;
-use esas\cmsgate\epos\protocol\IiiProtocol;
-use esas\cmsgate\Registry;
 use esas\cmsgate\epos\RegistryEpos;
-use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
+use esas\cmsgate\Registry;
 use Exception;
 
 abstract class ControllerEpos extends Controller
 {
-    /**
-     * @var ConfigWrapperEpos
-     */
-    protected $configWrapper;
-
     /**
      * @var RegistryEpos
      */
@@ -35,7 +28,6 @@ abstract class ControllerEpos extends Controller
     {
         parent::__construct();
         $this->registry = Registry::getRegistry();
-        $this->configWrapper = Registry::getRegistry()->getConfigWrapper();
     }
 
     public function checkOrderWrapper(&$orderWrapper) {

@@ -1,10 +1,10 @@
 <?php
 
 
-namespace esas\cmsgate\epos\view\client;
+namespace esas\cmsgate\epos\hro\client;
 
 
-use esas\cmsgate\utils\htmlbuilder\hro\HRO;
+use esas\cmsgate\hro\HRO;
 
 interface CompletionPanelEposHRO extends HRO
 {

@@ -1,6 +1,5 @@
 <?php
 /** @var array $scriptData */
-/** @var \esas\cmsgate\epos\view\client\CompletionPanelEposHRO_v1 $completionPanel */
 $completionPanel = $this->scriptData["completionPanel"];
 ?>
 

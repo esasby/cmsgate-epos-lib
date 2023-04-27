@@ -6,7 +6,7 @@
  * Time: 14:11
  */
 
-namespace esas\cmsgate\epos\view\client;
+namespace esas\cmsgate\epos\hro\client;
 
 use esas\cmsgate\utils\htmlbuilder\Attributes as attribute;
 use esas\cmsgate\utils\htmlbuilder\Elements as element;

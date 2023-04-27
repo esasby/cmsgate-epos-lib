@@ -12,7 +12,6 @@ use esas\cmsgate\epos\protocol\EposInvoicePaymentAllowRq;
 use esas\cmsgate\epos\protocol\EposInvoicePaymentDenyRq;
 use esas\cmsgate\epos\protocol\EposInvoiceUpdateRq;
 use esas\cmsgate\epos\protocol\EposProtocolFactory;
-use esas\cmsgate\epos\protocol\OrderProduct;
 use esas\cmsgate\protocol\Amount;
 use esas\cmsgate\wrappers\OrderWrapper;
 use Exception;

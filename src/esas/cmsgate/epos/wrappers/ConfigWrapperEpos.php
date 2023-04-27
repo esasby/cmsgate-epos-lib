@@ -17,6 +17,13 @@ use esas\cmsgate\wrappers\ConfigWrapper;
 class ConfigWrapperEpos extends ConfigWrapper
 {
     /**
+     * @return ConfigWrapperEpos
+     */
+    public static function fromRegistry() {
+        return Registry::getRegistry()->getConfigWrapper();
+    }
+
+    /**
      * Произольно название интернет-мазагина
      * @return string
      */

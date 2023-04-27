@@ -8,13 +8,14 @@
 
 namespace esas\cmsgate\epos\controllers;
 
-use esas\cmsgate\epos\protocol\EposProtocolFactory;
-use esas\cmsgate\epos\RegistryEpos;
-use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
-use esas\cmsgate\protocol\Amount;
 use esas\cmsgate\epos\protocol\EposInvoiceAddRq;
 use esas\cmsgate\epos\protocol\EposInvoiceAddRs;
+use esas\cmsgate\epos\protocol\EposProtocolFactory;
 use esas\cmsgate\epos\protocol\OrderProduct;
+use esas\cmsgate\epos\RegistryEpos;
+use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
+use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
+use esas\cmsgate\protocol\Amount;
 use esas\cmsgate\Registry;
 use esas\cmsgate\wrappers\OrderWrapper;
 use Exception;
@@ -45,7 +46,7 @@ class ControllerEposInvoiceAdd extends ControllerEpos
             $invoiceAddRq->setFullAddress($orderWrapper->getAddress());
             $invoiceAddRq->setAmount(new Amount($orderWrapper->getAmount(), $orderWrapper->getCurrency()));
             $invoiceAddRq->setShippingAmount(new Amount($orderWrapper->getShippingAmount(), $orderWrapper->getCurrency()));
-            $invoiceAddRq->setDueInterval($this->configWrapper->getDueInterval());
+            $invoiceAddRq->setDueInterval(ConfigWrapperEpos::fromRegistry()->getDueInterval());
             if (self::setOrderProducts($orderWrapper, $invoiceAddRq))
                 $this->logger->warn($loggerMainString . "Total amount mismatch. Extra tax was added"); //что-то так с суммой
             $eposProtocol = EposProtocolFactory::getProtocol();

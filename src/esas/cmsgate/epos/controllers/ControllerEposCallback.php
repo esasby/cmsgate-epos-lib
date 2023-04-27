@@ -7,6 +7,7 @@ use esas\cmsgate\epos\protocol\EposInvoiceGetRs;
 use esas\cmsgate\epos\protocol\EposProtocol;
 use esas\cmsgate\epos\protocol\EposProtocolFactory;
 use esas\cmsgate\epos\RegistryEpos;
+use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
 use esas\cmsgate\wrappers\OrderWrapper;
 use Exception;
 use Throwable;
@@ -49,7 +50,7 @@ class ControllerEposCallback extends ControllerEpos
             $this->localOrderWrapper = RegistryEpos::getRegistry()->getOrderWrapperByOrderNumberOrId($this->eposInvoiceGetRs->getOrderNumber());
             if (empty($this->localOrderWrapper))
                 throw new Exception('Can not load order info for id[' . $this->eposInvoiceGetRs->getOrderNumber() . "]");
-            if (!$this->configWrapper->isSandbox() // на тестовой системе это пока не работает
+            if (!ConfigWrapperEpos::fromRegistry()->isSandbox() // на тестовой системе это пока не работает
                 && !$this->eposInvoiceGetRs->getAmount()->isEqual($this->localOrderWrapper->getAmountObj())) {
                 throw new Exception("Unmapped purchaseid: localFullname[" . $this->localOrderWrapper->getFullName()
                     . "], remoteFullname[" . $this->eposInvoiceGetRs->getFullName()

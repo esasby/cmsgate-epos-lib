@@ -16,4 +16,6 @@ class AdminViewFieldsEpos extends AdminViewFields
     const EPOS_PROCESSOR_ESAS = "esas";
     const EPOS_PROCESSOR_UPS = "ups";
     const EPOS_PROCESSOR_RRB = "rrb";
+    const LOGIN_FORM_LOGIN = 'login';
+    const LOGIN_FORM_PASSWORD = 'password';
 }
