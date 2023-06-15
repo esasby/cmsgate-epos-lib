@@ -15,7 +15,11 @@ use esas\cmsgate\epos\utils\RequestParamsEpos;
 use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
 use esas\cmsgate\epos\wrappers\ConfigWrapperEpos;
 use esas\cmsgate\lang\Translator;
+use esas\cmsgate\messenger\Messenger;
 use esas\cmsgate\Registry;
+use esas\cmsgate\utils\htmlbuilder\presets\BootstrapPreset as bootstrap;
+use esas\cmsgate\view\client\ClientViewFields;
+use esas\cmsgate\wrappers\OrderWrapper;
 use Exception;
 use Throwable;
 
@@ -31,8 +35,35 @@ class ControllerEposCompletionPanel extends ControllerEpos
             $this->checkOrderWrapper($orderWrapper);
             $loggerMainString = "Order[" . $orderWrapper->getOrderNumberOrId() . "]: ";
             $this->logger->info($loggerMainString . "Controller started");
-//            $completionPanel = $this->registry->getCompletionPanel($orderWrapper);
             $completionPanel = CompletionPanelEposHROFactory::findBuilder();
+
+            switch ($orderWrapper->getStatus()->getOrderStatus()) {
+                case Registry::getRegistry()->getConfigWrapper()->getOrderStatusPayed():
+                    Messenger::fromRegistry()->addSuccessMessage(
+                        Registry::getRegistry()->getConfigWrapper()->cookText(
+                            Translator::fromRegistry()->translate(ClientViewFields::COMPLETION_PAGE_ORDER_PAYED_ALERT), $orderWrapper));
+                    return $completionPanel;
+                case Registry::getRegistry()->getConfigWrapper()->getOrderStatusFailed():
+                    Messenger::fromRegistry()->addErrorMessage(
+                        Registry::getRegistry()->getConfigWrapper()->cookText(
+                            Translator::fromRegistry()->translate(ClientViewFields::COMPLETION_PAGE_ORDER_FAILED_ALERT), $orderWrapper));
+                    return $completionPanel;
+                case Registry::getRegistry()->getConfigWrapper()->getOrderStatusCanceled():
+                    Messenger::fromRegistry()->addWarnMessage(
+                        Registry::getRegistry()->getConfigWrapper()->cookText(
+                            Translator::fromRegistry()->translate(ClientViewFields::COMPLETION_PAGE_ORDER_CANCELED_ALERT), $orderWrapper));
+                    return $completionPanel;
+                case Registry::getRegistry()->getConfigWrapper()->getOrderStatusPending():
+                    $completionPanel->setOrderCanBePayed(true);
+                    break;
+                default:
+                    $this->logger->error($loggerMainString . 'Unknown order status[' . $orderWrapper->getStatus()->getOrderStatus() . ']');
+                    Messenger::fromRegistry()->addWarnMessage(
+                        Registry::getRegistry()->getConfigWrapper()->cookText(
+                            Translator::fromRegistry()->translate(ClientViewFields::COMPLETION_PAGE_ORDER_UNKNOWN_STATUS_ALERT), $orderWrapper));
+                    return $completionPanel;
+            }
+
             $completionPanel
                 ->setCompletionText(ConfigWrapperEpos::fromRegistry()->cookText(ConfigWrapperEpos::fromRegistry()->getCompletionText(), $orderWrapper))
                 ->setInstructionsSectionEnabled(ConfigWrapperEpos::fromRegistry()->isInstructionsSectionEnabled())
@@ -63,6 +94,31 @@ class ControllerEposCompletionPanel extends ControllerEpos
             $this->logger->error($loggerMainString . "Controller exception! ", $e);
             Registry::getRegistry()->getMessenger()->addErrorMessage($e->getMessage());
             throw $e;
+        }
+    }
+
+    /**
+     * @param $completionPanel CompletionPanelEposHRO
+     * @param $orderWrapper OrderWrapper
+     * @return \esas\cmsgate\utils\htmlbuilder\Element
+     */
+    public function initPanel($completionPanel, $orderWrapper) {
+        switch ($orderWrapper->getStatus()->getOrderStatus()) {
+            case Registry::getRegistry()->getConfigWrapper()->getOrderStatusPayed():
+                $alert = ClientViewFields::COMPLETION_PAGE_ORDER_PAYED_ALERT;
+                $alertType = bootstrap::ALERT_TYPE_SUCCESS;
+                break;
+            case Registry::getRegistry()->getConfigWrapper()->getOrderStatusFailed():
+                $alert = ClientViewFields::COMPLETION_PAGE_ORDER_FAILED_ALERT;
+                $alertType = bootstrap::ALERT_TYPE_DANGER;
+                break;
+            case Registry::getRegistry()->getConfigWrapper()->getOrderStatusCanceled():
+                $alert = ClientViewFields::COMPLETION_PAGE_ORDER_CANCELED_ALERT;
+                $alertType = bootstrap::ALERT_TYPE_WARNING;
+                break;
+            case Registry::getRegistry()->getConfigWrapper()->getOrderStatusPending():
+            default:
+
         }
     }
 }

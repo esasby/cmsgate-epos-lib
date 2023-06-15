@@ -11,6 +11,7 @@ namespace esas\cmsgate\epos\hro\client;
 
 use esas\cmsgate\epos\utils\ResourceUtilsEpos;
 use esas\cmsgate\epos\view\client\ClientViewFieldsEpos;
+use esas\cmsgate\hro\panels\MessagesPanelHROFactory;
 use esas\cmsgate\lang\Translator;
 use esas\cmsgate\utils\htmlbuilder\Attributes as attribute;
 use esas\cmsgate\utils\htmlbuilder\Elements as element;
@@ -49,6 +50,11 @@ class CompletionPanelEposHRO_v1 implements CompletionPanelEposHRO
      */
     protected $webpaySectionEnable;
     protected $additionalCSSFile;
+
+    /**
+     * @var bool
+     */
+    protected $orderCanBePayed = false;
 
     /**
      * @param mixed $instructionText
@@ -122,6 +128,13 @@ class CompletionPanelEposHRO_v1 implements CompletionPanelEposHRO
         return $this;
     }
 
+    /**
+     * @inheritDoc
+     */
+    public function setOrderCanBePayed($orderCanBePayed) {
+        $this->orderCanBePayed = $orderCanBePayed;
+        return $this;
+    }
 
 
     public static function builder() {
@@ -129,6 +142,9 @@ class CompletionPanelEposHRO_v1 implements CompletionPanelEposHRO
     }
 
     public function build() {
+        if (!$this->orderCanBePayed) {
+            return MessagesPanelHROFactory::findBuilder()->build();
+        }
         $this->onlyOneTab = false;
         return
             element::content(
@@ -147,6 +163,9 @@ class CompletionPanelEposHRO_v1 implements CompletionPanelEposHRO
 
     public function renderWebpayOnly()
     {
+        if (!$this->orderCanBePayed) {
+            echo MessagesPanelHROFactory::findBuilder()->build();
+        }
         $this->onlyOneTab = true;
         $completionPanel =
             $this->elementTab(
@@ -159,6 +178,9 @@ class CompletionPanelEposHRO_v1 implements CompletionPanelEposHRO
 
     public function redirectWebpay()
     {
+        if (!$this->orderCanBePayed) {
+            echo MessagesPanelHROFactory::findBuilder()->build();
+        }
         $this->onlyOneTab = true;
         $completionPanel = element::content(
             $this->elementTab(

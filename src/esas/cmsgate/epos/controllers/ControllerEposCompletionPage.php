@@ -32,7 +32,7 @@ class ControllerEposCompletionPage extends ControllerEpos
             $completionPanel = $controller->process($orderWrapper);
             $completionPanel = $completionPanel->__toString();
 
-            return ClientOrderCompletionPageHROFactory::createBuilder()
+            return ClientOrderCompletionPageHROFactory::findBuilder()
                 ->setOrderWrapper($orderWrapper)
                 ->setElementCompletionPanel($completionPanel);
         } catch (Throwable $e) {

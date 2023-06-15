@@ -51,8 +51,14 @@ interface CompletionPanelEposHRO extends HRO
     public function setQRCodeSectionEnabled($enabled);
 
     /**
+     * @param bool $orderCanBePayed
+     * @return CompletionPanelEposHRO
+     */
+    public function setOrderCanBePayed($orderCanBePayed);
+
+    /**
      * @param mixed $qrCode
-     * @return CompletionPanelEposHRO_v1
+     * @return CompletionPanelEposHRO
      */
     public function setQrCode($qrCode);
 
