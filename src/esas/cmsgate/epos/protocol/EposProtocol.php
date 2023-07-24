@@ -86,9 +86,8 @@ class EposProtocol extends ProtocolCurl
             if ($resArray == null || !is_array($resArray)) {
                 throw new Exception("Wrong response!", EposRs::ERROR_RESP_FORMAT);
             }
-            $resArray = $resArray[0]; //epos возвращает даже один счет массивом
-            if (array_key_exists('id', $resArray)) {
-                $resp->setInvoiceId($resArray['id']);
+            if (array_key_exists('id', $resArray[0])) { //epos возвращает даже один счет массивом
+                $resp->setInvoiceId($resArray[0]['id']);
             } else {
                 $resp->setResponseCode(array_key_exists('code', $resArray) ? $resArray['code'] : ProtocolError::ERROR_WRONG_MSG_FORMAT);
                 $resp->setResponseMessage(array_key_exists('message', $resArray) ? $resArray['message'] : "");
