@@ -21,7 +21,7 @@
     "ext-curl": "*",
     "ext-json": "*",
     "tecnickcom/tc-lib-barcode": "1.15.12",
-    "esas/cmsgate-core": "~v2.2.4"
+    "esas/cmsgate-core": "~v2.2.9"
   },
   "autoload": {
     "psr-4": {
