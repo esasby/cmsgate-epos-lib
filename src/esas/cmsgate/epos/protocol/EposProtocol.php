@@ -129,11 +129,18 @@ class EposProtocol extends ProtocolCurl
         foreach ($invoiceAddRq->getProducts() as $pr) {
             $item['code'] = $pr->getInvId();
             $item['name'] = htmlentities($pr->getName(), ENT_XML1);
-            self::$devisor=1.0; // обновим значение делителя, хотябы одно значеиние должно быть float обязательно
-            $item['quantity'] = intval(self::quantityToIntUpdate($pr->getCount()));
-            $item['measure'] = 'pcs' . (self::$devisor>1 ? '/' . self::$devisor : ''); // целое или часть от целого
-            $item['unitPrice']['value'] = self::formatDecimal($pr->getUnitPrice()/self::$devisor);
-            //проверить нет ли ограничения дл hg глубины дробной части
+            $quantityOld=self::formatDecimal($pr->getCount());
+            $updateQuantity=false; // обновить значения при дробном количестве
+            if( (string)round($quantityOld) != (string)$quantityOld ){
+                $updateQuantity=true;
+            }
+            $item['quantity'] = $updateQuantity ? 1 : intval($quantityOld); //дробное количество считаем как один товар
+            $item['measure'] = ($updateQuantity ? '('.(string)$quantityOld.')' : '' ) . 'pcs'; // передаём значение количества
+            $priceUpdate=round( self::formatDecimal($pr->getUnitPrice())*$quantityOld, 2); // для валидатора только 2 знака после точки
+            if( $priceUpdate == 0 ){
+                $priceUpdate=0.01; // не должно быть нулевого значения
+            }
+            $item['unitPrice']['value'] = $priceUpdate;
             $items[] = $item;
         }
         $postData['items'] = $items;
@@ -141,24 +148,6 @@ class EposProtocol extends ProtocolCurl
 
     private static function formatDecimal($decimal) {
         return floatval(str_replace(",", ".", strval($decimal)));
-    }
-
-    /**
-     * подготовка дробных частей товаров для передачи в заказ
-     *
-     * @param $decimal
-     * @return $decimal
-     */
-    public static $devisor=1.0; // делитель для значения, хотябы одно значеиние должно быть float обязательно
-    public static function quantityToIntUpdate($decimal) { // перевод из дробной части в int с определение делителя
-        if( self::$devisor > 1e9 ){ // защита от бесконечной рекурсии пример дроби 0.(3)
-            return $decimal;
-        }
-        if( (string)round($decimal) !== (string)$decimal ){ // сравниваем именно string, т.к. float значения X.X(0)1
-            self::$devisor=self::$devisor*10;
-            $decimal=self::quantityToIntUpdate($decimal*10);
-        }
-        return $decimal;
     }
 
     public function invoiceUpdate(EposInvoiceUpdateRq $invoiceUpdateRq)
