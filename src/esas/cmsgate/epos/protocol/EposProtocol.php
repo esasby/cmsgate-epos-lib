@@ -129,18 +129,19 @@ class EposProtocol extends ProtocolCurl
         foreach ($invoiceAddRq->getProducts() as $pr) {
             $item['code'] = $pr->getInvId();
             $item['name'] = htmlentities($pr->getName(), ENT_XML1);
-            $quantityOld=self::formatDecimal($pr->getCount());
-            $updateQuantity=false; // обновить значения при дробном количестве
-            if( (string)round($quantityOld) != (string)$quantityOld ){
-                $updateQuantity=true;
+            $quantityOld = self::formatDecimal($pr->getCount());
+            $priceUpdate = self::formatDecimal($pr->getUnitPrice());
+            $updateQuantity = false; // обновить значения при дробном количестве
+            if ((string)round($quantityOld) != (string)$quantityOld) {
+                $updateQuantity = true;
+                $priceUpdate = self::formatDecimal($pr->getUnitPrice()) * $quantityOld;
             }
             $item['quantity'] = $updateQuantity ? 1 : intval($quantityOld); //дробное количество считаем как один товар
-            $item['measure'] = ($updateQuantity ? '('.(string)$quantityOld.')' : '' ) . 'pcs'; // передаём значение количества
-            $priceUpdate=round( self::formatDecimal($pr->getUnitPrice())*$quantityOld, 2); // для валидатора только 2 знака после точки
-            if( $priceUpdate == 0 ){
-                $priceUpdate=0.01; // не должно быть нулевого значения
+            $item['measure'] = ($updateQuantity ? '(' . strval($quantityOld) . ')' : '') . 'pcs'; // передаём значение количества
+            if ($priceUpdate == 0) {
+                $priceUpdate = 0.01; // не должно быть нулевого значения
             }
-            $item['unitPrice']['value'] = $priceUpdate;
+            $item['unitPrice']['value'] = round($priceUpdate, 2); // для валидатора только 2 знака после точки
             $items[] = $item;
         }
         $postData['items'] = $items;
