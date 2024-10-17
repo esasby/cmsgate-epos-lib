@@ -68,8 +68,8 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
         $this->registerField(
             (new ConfigFieldNumber(ConfigFieldsEpos::dueInterval()))
                 ->setMin(1)
-                ->setMax(10)
-                ->setValidator(new ValidatorInteger(1, 10))
+                ->setMax(1000)
+                ->setValidator(new ValidatorInteger(1, 1000))
                 ->setRequired(true));
         $this->registerField(
             (new ConfigFieldStatusList(ConfigFieldsEpos::orderStatusPending()))
@@ -99,7 +99,8 @@ class ManagedFieldsFactoryEpos extends ManagedFieldsFactory
                 ->setValidator(new ValidatorNotEmpty()));
         $this->registerField(
             (new ConfigFieldRichtext(ConfigFieldsEpos::paymentMethodDetails()))
-        );
+                ->setRequired(true)
+                ->setValidator(new ValidatorNotEmpty()));
         $this->registerField(
             (new ConfigFieldText(ConfigFieldsEpos::paymentMethodNameWebpay()))
                 ->setRequired(true)
